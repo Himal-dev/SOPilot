@@ -22,8 +22,14 @@
 
 - Host over HTTPS; camera and microphone access will not work reliably over plain HTTP on phones.
 - Keep the page lightweight and voice-first; avoid controls that compete with the guide.
+- Keep the hosted trial invite-only with `PLANT_DOCTOR_TRIAL_CODE`. The code
+  should live server-side and in the ignored local deploy file, not in
+  `config.js` or committed docs.
 - Test on iOS Safari and Android Chrome for camera switching, mic permissions, WebRTC audio, and page visibility changes.
 - Add visible permission recovery states: camera denied, mic denied, poor network, analysis still running.
 - Persist no raw secrets in the browser. Use the server token endpoint for ElevenLabs private sessions.
+- Let the Lambda Function URL own hosted CORS. Do not also enable FastAPI CORS
+  for the same hosted origins, because duplicate `Access-Control-Allow-Origin`
+  headers make browsers treat valid auth responses as failures.
 - Store trial outputs server-side only if users consent; plant photos may include home interiors.
 - Add observability for each step: session start, photo captured, care topic recorded, submit result, retry reason, final report shown.

@@ -1,4 +1,53 @@
-# BoloBuddy AWS Deployment
+# AWS Deployment
+
+## Plant Doctor Serverless Trial
+
+`deploy/aws/deploy_plant_doctor.sh` hosts the Plant Doctor mobile trial as a
+low-cost AWS serverless app:
+
+- Static HTML/CSS/JS on an S3 HTTPS object URL.
+- FastAPI packaged with Mangum on a Python 3.12 Lambda Function URL.
+- Invite-only access with `PLANT_DOCTOR_TRIAL_CODE`; the trial code is not
+  embedded in the browser bundle.
+- Private ElevenLabs conversation tokens minted server-side.
+- OpenAI and ElevenLabs provider keys stored as Lambda environment variables for
+  this trial.
+- CloudWatch structured session logs with 7-day retention.
+- Best-effort AWS Budget alert, currently used with a 10 USD/month guardrail.
+
+Set AWS and provider credentials in the shell:
+
+```bash
+export AWS_DEFAULT_REGION=ap-south-1
+export OPENAI_API_KEY=...
+export ELEVENLABS_API_KEY=...
+export ELEVENLABS_PLANT_DOCTOR_AGENT_ID=...
+export PLANT_DOCTOR_TRIAL_CODE="$(cat deploy/aws/plant_doctor_trial_code.txt)"
+./deploy/aws/deploy_plant_doctor.sh
+```
+
+The Plant Doctor deploy writes ignored local files:
+
+- `deploy/aws/plant_doctor_last_deploy.json`: app/API URL and AWS resource names.
+- `deploy/aws/plant_doctor_trial_code.txt`: current invite code.
+
+Important CORS note: Lambda Function URL owns hosted CORS for Plant Doctor.
+The deploy intentionally sets `PLANT_DOCTOR_CORS_ORIGINS=""` in Lambda. Do not
+also enable FastAPI CORS for the hosted origin, because duplicate
+`Access-Control-Allow-Origin` headers make browsers reject otherwise valid
+access-code responses.
+
+The `APP_TOKEN` input is intentionally empty by default for Plant Doctor. A
+static app token is public once embedded in S3-hosted JavaScript; the actual
+trial gate is the server-side invite code. Replace this with Cognito or signed
+short-lived sessions before opening the app beyond invited testers.
+
+See:
+
+- `docs/plant-doctor-aws-architecture.md`
+- `docs/plant-doctor-aws-deploy-status.md`
+
+## BoloBuddy AWS Deployment
 
 This deployment turns the Kids Voice Assessment example into a small hosted
 product:

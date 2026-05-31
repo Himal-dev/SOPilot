@@ -1,59 +1,84 @@
 # Plant Doctor AWS Deploy Status
 
-## 2026-05-31
+## 2026-05-31 Current Status
 
-The app is ready for a low-cost AWS trial deploy, but the current IAM user is
-blocked by an explicit `HackathonExpiry` policy.
+Plant Doctor is live in AWS account `746486153317` using the new `ai-agent-dev`
+deployment principal.
 
 Validated:
 
-- AWS account `884692409757` is reachable with the provided IAM user.
-- Required resource tag is `Owner=himalmangla@gmail.com`.
-- Local app tests pass.
-- A Plant Doctor-specific deploy script exists at
-  `deploy/aws/deploy_plant_doctor.sh`.
+- Hosted app:
+  <https://sopilot-plant-doctor-site-746486153317-20260531.s3.ap-south-1.amazonaws.com/index.html>
+- Backend API: Lambda Function URL recorded in the ignored local file
+  `deploy/aws/plant_doctor_last_deploy.json`.
+- Required resource tag `Owner=himalmangla@gmail.com` is present on the S3 site
+  bucket and Lambda function.
+- Lambda runtime is Python 3.12, 1024 MB, 120 second timeout.
+- Lambda Function URL CORS allows `content-type`, `x-app-token`,
+  `x-trial-code`, `x-session-id`, and `authorization`. `x-app-token` remains
+  allowed for compatibility, but Plant Doctor leaves the token value empty.
+- App-level CORS is disabled in hosted Lambda (`PLANT_DOCTOR_CORS_ORIGINS=""`)
+  so browsers do not receive duplicate `Access-Control-Allow-Origin` headers.
+- Invite code auth is enforced by `PLANT_DOCTOR_TRIAL_CODE`; the code is stored
+  only in Lambda environment and the ignored local file
+  `deploy/aws/plant_doctor_trial_code.txt`.
+- `GET /api/auth/check` returns `401` for a wrong code and `200` for the current
+  invite code.
+- `GET /api/elevenlabs/session` returns `enabled: true` with
+  `auth: private_webrtc` after unlock.
+- CloudWatch structured session logs include `auth_check` and
+  `voice_session_config` events keyed by `x-session-id`.
+- CloudWatch log retention is set to 7 days.
+- AWS Budget `sopilot-plant-doctor-monthly-10usd` exists.
+- The temporary Lightsail fallback instance/key used during IAM debugging was
+  deleted after Lambda deploy succeeded.
+- Private GitHub repo is `https://github.com/Himal-dev/SOPilot`.
 
-Deployment blockers observed:
+## Deployment Command
 
-- `iam:ListAttachedUserPolicies`, `iam:ListUserPolicies`, `iam:GetPolicy`,
-  `iam:ListPolicyVersions`, and `iam:SimulatePrincipalPolicy` are explicitly
-  denied, so this user cannot inspect or simulate its own policy boundary.
-- `s3:CreateBucket` is explicitly denied.
-- `s3:ListAllMyBuckets` is explicitly denied.
-- `s3:GetBucketTagging` is explicitly denied, including on known buckets.
-- `s3:HeadBucket` and `s3:HeadObject` return `403` for known buckets, so even
-  existing static-site buckets cannot be safely reused by this principal.
-- `iam:CreateRole` is explicitly denied.
-- `lambda:ListFunctions` is explicitly denied.
-- `lambda:GetFunction` and `lambda:GetFunctionUrlConfig` are explicitly denied,
-  including on known functions.
+Use environment variables; do not store provider or AWS credentials in repo
+files.
 
-The deploy script was adjusted to support reusing an existing S3 bucket under a
-prefix, but Lambda/IAM access is still required for the backend API.
+```bash
+export AWS_DEFAULT_REGION=ap-south-1
+export OPENAI_API_KEY=...
+export ELEVENLABS_API_KEY=...
+export ELEVENLABS_PLANT_DOCTOR_AGENT_ID=...
+export PLANT_DOCTOR_TRIAL_CODE="$(cat deploy/aws/plant_doctor_trial_code.txt)"
+./deploy/aws/deploy_plant_doctor.sh
+```
 
-Needed to deploy:
+The script preserves low fixed spend by using S3 HTTPS static hosting and a
+Lambda Function URL. It writes ignored local metadata and does not commit the
+trial code.
 
-- A deploy IAM principal that can create/update one Lambda function, configure a
-  Lambda Function URL, write static files to an S3 bucket or prefix, and tag
-  resources with `Owner=himalmangla@gmail.com`; or
-- Removal/relaxation of the explicit `HackathonExpiry` denies for the existing
-  IAM user.
+## Known Operational Notes
 
-Bypassing the policy is not a valid or reliable route. The clean path is to ask
-the account administrator to either extend/remove `HackathonExpiry` for this
-user, or provide a narrow deploy role scoped to Plant Doctor resources.
+- If the browser says the valid code does not work, first hard refresh. If it
+  still fails, check the auth response headers and confirm there is exactly one
+  `Access-Control-Allow-Origin` header.
+- Lambda Function URL owns hosted CORS. Do not set `PLANT_DOCTOR_CORS_ORIGINS`
+  to `*` in the hosted Lambda env; that creates duplicate CORS headers.
+- The app token is intentionally empty for Plant Doctor. It is public by nature
+  in a static web app and is not useful as real auth. The invite code is the
+  trial gate.
+- Budget creation is best-effort in the deploy script. It may print a warning
+  if the budget already exists.
+- Current report/photo handling is request-scoped for the trial. Add durable S3
+  evidence storage and deletion workflows before broader beta.
 
-Minimum useful scope:
+## Historical Blocker In Old AWS Account
 
-- `s3:PutObject`, `s3:DeleteObject`, `s3:GetObject`, and `s3:ListBucket` on one
-  static-site bucket/prefix.
-- `lambda:CreateFunction`, `lambda:UpdateFunctionCode`,
-  `lambda:UpdateFunctionConfiguration`, `lambda:GetFunction`,
-  `lambda:CreateFunctionUrlConfig`, `lambda:UpdateFunctionUrlConfig`,
-  `lambda:GetFunctionUrlConfig`, `lambda:AddPermission`, `lambda:TagResource`,
-  and `lambda:InvokeFunctionUrl` for `sopilot-plant-doctor-*`.
-- `iam:CreateRole`, `iam:PutRolePolicy`, `iam:PassRole`, `iam:GetRole`, and
-  `iam:TagRole` for one Lambda execution role, or provide a pre-created role
-  ARN and only allow `iam:PassRole` on that role.
-- `logs:PutRetentionPolicy` for `/aws/lambda/sopilot-plant-doctor-*`.
-- Optional `budgets:CreateBudget` for the low-credit guardrail.
+The original hackathon account `884692409757` was reachable but blocked by an
+explicit `HackathonExpiry` policy.
+
+Observed denies included:
+
+- `s3:CreateBucket`, `s3:ListAllMyBuckets`, `s3:GetBucketTagging`, `s3:HeadBucket`,
+  and `s3:HeadObject`.
+- `iam:CreateRole`, IAM policy inspection, and IAM simulation actions.
+- `lambda:ListFunctions`, `lambda:GetFunction`, and
+  `lambda:GetFunctionUrlConfig`.
+
+Bypassing that policy is not a valid route. Use the new account, or ask the old
+account administrator for a narrow deploy role scoped to Plant Doctor resources.

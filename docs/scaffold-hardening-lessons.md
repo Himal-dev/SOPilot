@@ -17,7 +17,10 @@ agents to become working apps with less custom glue.
   approval in the runner itself. App servers no longer need to manually copy the
   interrupt/resume loop for trial deployments.
 - **Reusable web security:** `sopilot.web_runtime.install_api_security(...)`
-  adds optional CORS and `x-app-token` protection to FastAPI apps.
+  adds optional CORS, public app-token gating, and server-side invite-code
+  gating to FastAPI apps. Hosted Lambda Function URL deployments should let the
+  Function URL own CORS and keep app-level CORS disabled to avoid duplicate
+  browser CORS headers.
 - **SOP-owned questions:** Plant Doctor's care routine questions now live in the
   SOP via `[ask: ...]`, so the scaffold can surface them consistently.
 - **Media upload normalization:** `sopilot.media.build_media_map(...)` converts
@@ -49,6 +52,6 @@ agents to become working apps with less custom glue.
   across new apps.
 - **Deployment templates:** `deploy/aws/deploy_plant_doctor.sh` is useful, but a
   generic `deploy/aws/deploy_agent.sh` should take an agent name, static app
-  folder, API module, tags, and resource prefix.
+  folder, API module, tags, resource prefix, invite-code policy, and CORS owner.
 - **State stores:** local SQLite works for development, but serverless needs a
   durable store abstraction for interrupt/resume across Lambda invocations.

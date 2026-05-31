@@ -41,6 +41,7 @@ pip install -e ".[app]"
 export OPENAI_API_KEY=...                    # required for live vision analysis
 export ELEVENLABS_API_KEY=...                # required for private ElevenLabs agent sessions
 export ELEVENLABS_PLANT_DOCTOR_AGENT_ID=...  # or ELEVENLABS_AGENT_ID
+export PLANT_DOCTOR_TRIAL_CODE=...           # optional local invite-code gate
 uvicorn app.server:app --reload  # open http://127.0.0.1:8000
 
 # Headless Plant Doctor run (stub, no keys):
@@ -78,6 +79,35 @@ recommendation sections for UI display.
 For the Plant Doctor web UI, live mode does **not** silently use stub observations:
 if real OpenAI/ElevenLabs evidence is unavailable, the report says what failed
 instead of filling diagnosis or care-plan fields with placeholders.
+
+## Hosted Plant Doctor Trial
+
+The current hosted Plant Doctor trial runs as a low-cost AWS serverless app:
+
+- Static mobile web app on S3 HTTPS:
+  <https://sopilot-plant-doctor-site-746486153317-20260531.s3.ap-south-1.amazonaws.com/index.html>
+- FastAPI backend on a Lambda Function URL, packaged with Mangum.
+- Invite-only access through `PLANT_DOCTOR_TRIAL_CODE`; the code is not embedded
+  in the browser bundle. The deploy writes the current code to the ignored local
+  file `deploy/aws/plant_doctor_trial_code.txt`.
+- Session-wise JSON logs in CloudWatch via `sopilot.session_logging`; browsers
+  send `x-session-id` with auth, voice-session, run, and decision requests.
+- Lambda Function URL owns CORS. Keep `PLANT_DOCTOR_CORS_ORIGINS` empty in the
+  hosted Lambda env to avoid duplicate `Access-Control-Allow-Origin` headers.
+
+Deploy with:
+
+```bash
+export AWS_DEFAULT_REGION=ap-south-1
+export OPENAI_API_KEY=...
+export ELEVENLABS_API_KEY=...
+export ELEVENLABS_PLANT_DOCTOR_AGENT_ID=...
+export PLANT_DOCTOR_TRIAL_CODE="$(cat deploy/aws/plant_doctor_trial_code.txt)" # preserve existing code
+./deploy/aws/deploy_plant_doctor.sh
+```
+
+See [Plant Doctor AWS architecture](docs/plant-doctor-aws-architecture.md) and
+[Plant Doctor AWS deploy status](docs/plant-doctor-aws-deploy-status.md).
 
 ## Guided Conversation Agents
 
@@ -135,7 +165,7 @@ sopilot/
     reporting.py        # evidence readiness, failures, and retry guidance
     report_writer.py    # reusable JSON report prompt + OpenAI client hook
     report_view.py      # reusable rich-report section/view shaping
-    web_runtime.py      # reusable FastAPI CORS/app-token security
+    web_runtime.py      # reusable FastAPI CORS/app-token/access-code security
   examples/             # car_inspection / rental_move_in / support_runbook / kids_voice_assessment / plant_doctor
   skills/               # reusable SOPilot build skills and capability guides
   docs/                 # architecture, how-to, state schema, tool contract, ADRs
@@ -150,17 +180,17 @@ write `sop.md`, decide on an `output_schema.json` (or `output_schema: suggest`),
 wire `agent_config.yaml` (adapters, MCP servers, HITL policy), drop deterministic
 cues in `sample_inputs/`, then `python -m sopilot run examples/<name>`.
 
-For the vendored `obra/superpowers` workflow skill bundle, see
-[`skills/superpowers/README.md`](skills/superpowers/README.md).
-
 ## Docs
 
 - [Architecture](docs/architecture.md)
 - [How to add a new agent](docs/how_to_add_new_agent.md)
 - [Scaffold hardening lessons](docs/scaffold-hardening-lessons.md)
+- [Plant Doctor AWS architecture](docs/plant-doctor-aws-architecture.md)
+- [Plant Doctor AWS deploy status](docs/plant-doctor-aws-deploy-status.md)
+- [Plant Doctor mobile trial notes](docs/plant-doctor-mobile-trial.md)
 - [State schema](docs/state_schema.md)
 - [Tool-connector contract](docs/tool_connector_contract.md)
 - [Kids Voice Assessment architecture](docs/kids_voice_assessment_architecture.md)
 - [ElevenLabs capabilities for BoloBuddy](docs/elevenlabs_voice_assessment_capabilities.md)
-- [BoloBuddy AWS deployment](deploy/aws/README.md)
+- [AWS deployment scripts](deploy/aws/README.md)
 - [ADRs](docs/adr/)

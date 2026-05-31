@@ -125,8 +125,10 @@ on the SOP wording/tags until the steps, evidence, and review points are right.
 - For hosted demos that should submit immediately, set
   `runtime.auto_finalize_on_start: true` or call `start_run(...,
   auto_finalize=True)` from the app server.
-- Use `sopilot.web_runtime.install_api_security(...)` for CORS and an optional
-  `x-app-token` gate instead of rebuilding that middleware per app.
+- Use `sopilot.web_runtime.install_api_security(...)` for optional CORS,
+  `x-app-token`, and invite-code gates instead of rebuilding that middleware per
+  app. For Lambda Function URL hosting, choose one CORS owner: either the
+  Function URL config or FastAPI middleware, not both.
 - Swap a stub MCP connector for a real one implementing `MCPConnector`.
 - Set `model.compiler.use_llm: true` (and the relevant API-key env var) to use
   the LLM compiler path; it falls back to the local parser if unavailable.
