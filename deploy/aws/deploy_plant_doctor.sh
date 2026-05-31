@@ -233,6 +233,10 @@ aws lambda tag-resource \
   --resource "$FUNCTION_ARN" \
   --tags Owner="$OWNER_TAG_VALUE" \
   --region "$REGION" >/dev/null
+aws logs create-log-group \
+  --log-group-name "/aws/lambda/$FUNCTION_NAME" \
+  --tags Owner="$OWNER_TAG_VALUE" \
+  --region "$REGION" >/dev/null 2>&1 || true
 aws logs put-retention-policy \
   --log-group-name "/aws/lambda/$FUNCTION_NAME" \
   --retention-in-days 7 \
