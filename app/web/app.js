@@ -149,6 +149,10 @@ async function verifyAccessCode(code, { quiet = false } = {}) {
     const response = await fetch(apiPath("/api/auth/check"), { headers: apiHeaders() });
     const result = await response.json();
     if (response.ok && result.ok) return true;
+    if (!quiet && els.authError && /app token/i.test(result.reason || "")) {
+      els.authError.textContent = "This page has an old app config. Please refresh and enter the code again.";
+      return false;
+    }
   } catch (_) {
     // Fall through to the user-facing error below.
   }
