@@ -1,0 +1,15 @@
+{
+  "capture_audio": {
+    "summary": "Fixture child recording attached for BoloBuddy dry-run.",
+    "confidence": 0.84,
+    "content": {
+      "recording_id": "mock_red_ball_skip_article",
+      "raw_audio_uri": "mock://audio/red_ball_skip_article",
+      "duration_ms": 3400,
+      "volume_score": 0.84,
+      "noise_score": 0.82,
+      "vad_speech_detected": true
+    },
+    "evidence_refs": ["mock_red_ball_skip_article"]
+  }
+}

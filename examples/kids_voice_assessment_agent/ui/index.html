@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BoloBuddy Voice Assessment</title>
+    <style>
+      :root {
+        --ink: #20302d;
+        --muted: #64736f;
+        --paper: #fffdf8;
+        --mint: #c8f3df;
+        --sky: #cfe9ff;
+        --sun: #ffe69b;
+        --coral: #ffb7a8;
+        --lavender: #ded7ff;
+        --line: #dbe5df;
+        --soft: #f4f7f2;
+        --shadow: 0 18px 45px rgba(40, 54, 50, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          ui-rounded, "Avenir Next", "Nunito", system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          linear-gradient(180deg, rgba(207, 233, 255, 0.38), transparent 340px),
+          var(--paper);
+      }
+
+      .KidsVoiceHome {
+        min-height: 100vh;
+        padding: 22px;
+      }
+
+      .shell {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .mascot {
+        width: 54px;
+        height: 54px;
+        border-radius: 42% 58% 48% 52%;
+        background:
+          radial-gradient(circle at 35% 38%, #20302d 0 3px, transparent 4px),
+          radial-gradient(circle at 64% 38%, #20302d 0 3px, transparent 4px),
+          radial-gradient(circle at 50% 62%, #20302d 0 9px, transparent 10px),
+          var(--sun);
+        box-shadow: inset 0 -8px 0 rgba(255, 183, 168, 0.5);
+        flex: 0 0 auto;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.45rem, 4vw, 2.8rem);
+        line-height: 1.04;
+        letter-spacing: 0;
+      }
+
+      .sub {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 0.98rem;
+      }
+
+      .mode-tabs {
+        display: flex;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #ffffff;
+      }
+
+      .start-strip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 22px;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: #ffffff;
+      }
+
+      .AgeSelector {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .AgeSelector button {
+        min-width: 58px;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--soft);
+        color: var(--ink);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .AgeSelector button.active {
+        background: var(--mint);
+        border-color: #7bc89d;
+      }
+
+      .mode-tabs button {
+        border: 0;
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .mode-tabs button.active {
+        background: var(--ink);
+        color: #ffffff;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+        gap: 22px;
+        align-items: start;
+      }
+
+      .PromptCard,
+      .ChildFeedbackCard,
+      .FriendlyRetryCard,
+      .ParentReportView,
+      .PracticeSuggestions {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .PromptCard {
+        padding: clamp(24px, 5vw, 44px);
+        min-height: 380px;
+        display: grid;
+        align-content: center;
+        gap: 28px;
+      }
+
+      .prompt-label {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .prompt-text {
+        font-size: clamp(2rem, 6vw, 4.6rem);
+        line-height: 1.08;
+        letter-spacing: 0;
+        margin: 0;
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .BigMicButton {
+        width: 148px;
+        aspect-ratio: 1;
+        border: 0;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 50% 38%, #ffffff 0 18px, transparent 19px),
+          linear-gradient(160deg, var(--coral), var(--sun));
+        color: var(--ink);
+        box-shadow: 0 18px 42px rgba(255, 129, 105, 0.25);
+        font-weight: 800;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+
+      .BigMicButton::before {
+        content: "";
+        width: 30px;
+        height: 46px;
+        border-radius: 18px;
+        border: 4px solid var(--ink);
+        border-top-width: 7px;
+        position: absolute;
+        top: 42px;
+      }
+
+      .BigMicButton::after {
+        content: "";
+        width: 58px;
+        height: 34px;
+        border: 4px solid var(--ink);
+        border-top: 0;
+        border-radius: 0 0 34px 34px;
+        position: absolute;
+        top: 78px;
+      }
+
+      .BigMicButton span {
+        margin-top: 82px;
+        z-index: 1;
+      }
+
+      .RecordingBubble {
+        min-height: 72px;
+        padding: 18px 20px;
+        border-radius: 22px;
+        background: var(--soft);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      .ListeningWaveform {
+        display: flex;
+        gap: 5px;
+        height: 40px;
+        align-items: center;
+      }
+
+      .ListeningWaveform i {
+        width: 7px;
+        border-radius: 999px;
+        background: #4ba87a;
+        animation: wave 1.1s ease-in-out infinite;
+      }
+
+      .ListeningWaveform i:nth-child(1) { height: 14px; animation-delay: 0s; }
+      .ListeningWaveform i:nth-child(2) { height: 28px; animation-delay: 0.08s; }
+      .ListeningWaveform i:nth-child(3) { height: 20px; animation-delay: 0.16s; }
+      .ListeningWaveform i:nth-child(4) { height: 34px; animation-delay: 0.24s; }
+      .ListeningWaveform i:nth-child(5) { height: 18px; animation-delay: 0.32s; }
+
+      @keyframes wave {
+        0%, 100% { transform: scaleY(0.55); opacity: 0.58; }
+        50% { transform: scaleY(1); opacity: 1; }
+      }
+
+      .ChildFeedbackCard,
+      .FriendlyRetryCard,
+      .PracticeSuggestions {
+        padding: 22px;
+        margin-top: 18px;
+      }
+
+      .FriendlyRetryCard {
+        background: #fff8dc;
+        display: none;
+      }
+
+      .ChildFeedbackCard {
+        background: linear-gradient(135deg, #ffffff, #edf9f3);
+      }
+
+      .ChildFeedbackCard h2,
+      .ParentReportView h2,
+      .PracticeSuggestions h2 {
+        margin: 0 0 10px;
+        font-size: 1.25rem;
+        letter-spacing: 0;
+      }
+
+      .ChildFeedbackCard p,
+      .FriendlyRetryCard p,
+      .PracticeSuggestions p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .ParentReportView {
+        padding: 22px;
+      }
+
+      .report-row {
+        border-top: 1px solid var(--line);
+        padding: 15px 0;
+      }
+
+      .report-row:first-of-type {
+        border-top: 0;
+      }
+
+      .report-row strong {
+        display: block;
+        margin-bottom: 7px;
+      }
+
+      .WordTimeline {
+        display: grid;
+        gap: 9px;
+      }
+
+      .word {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        padding: 11px 12px;
+        border-radius: 16px;
+        background: var(--soft);
+        align-items: center;
+      }
+
+      .word.variant { background: var(--sky); }
+      .word.missed { background: #fff3c4; }
+
+      .pill {
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+
+      .ScoreBreakdown {
+        display: grid;
+        gap: 12px;
+      }
+
+      .meter {
+        display: grid;
+        gap: 6px;
+      }
+
+      .meter div {
+        height: 10px;
+        border-radius: 999px;
+        background: var(--soft);
+        overflow: hidden;
+      }
+
+      .meter span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #73cfa1, #7ab8ff);
+      }
+
+      .teacher-note {
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      @media (max-width: 860px) {
+        .KidsVoiceHome {
+          padding: 16px;
+        }
+
+        header {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .PromptCard {
+          min-height: 320px;
+        }
+
+        .BigMicButton {
+          width: 132px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="KidsVoiceHome">
+      <div class="shell">
+        <header>
+          <div class="brand">
+            <div class="mascot" aria-hidden="true"></div>
+            <div>
+              <h1>Chalo bolke practice karte hain!</h1>
+              <p class="sub">BoloBuddy Voice Assessment</p>
+            </div>
+          </div>
+          <nav class="mode-tabs" aria-label="View mode">
+            <button class="active" type="button" data-mode="child">Child</button>
+            <button type="button" data-mode="parent">Parent</button>
+          </nav>
+        </header>
+
+        <section class="start-strip" aria-label="Assessment start">
+          <strong>Age</strong>
+          <div class="AgeSelector" aria-label="Child age">
+            <button type="button" data-age="3">3</button>
+            <button type="button" data-age="4">4</button>
+            <button type="button" data-age="5">5</button>
+            <button class="active" type="button" data-age="6">6</button>
+            <button type="button" data-age="7">7</button>
+            <button type="button" data-age="8">8</button>
+          </div>
+        </section>
+
+        <section class="layout">
+          <div>
+            <article class="PromptCard">
+              <div>
+                <div class="prompt-label">Aaj ka prompt</div>
+                <p class="prompt-text">The red ball is under the table.</p>
+              </div>
+              <div class="controls">
+                <button class="BigMicButton" type="button" id="micButton" aria-label="Tap to speak">
+                  <span>Tap</span>
+                </button>
+                <div class="RecordingBubble" id="recordingBubble">
+                  <div class="ListeningWaveform" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i>
+                  </div>
+                  <span id="recordingText">Ready jab tum ready ho.</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="FriendlyRetryCard" id="retryCard">
+              <h2>Ek baar aur?</h2>
+              <p>Thoda noise aa gaya. Mic ko thoda paas laao, phir se try karte hain.</p>
+            </article>
+
+            <article class="ChildFeedbackCard">
+              <h2>Nice try!</h2>
+              <p id="childFeedback">Tumne most words clearly bole.</p>
+            </article>
+
+            <article class="PracticeSuggestions">
+              <h2>Next practice</h2>
+              <p>Read once slowly, then say the full sentence with your best storyteller voice.</p>
+            </article>
+          </div>
+
+          <aside class="ParentReportView" id="parentReport" hidden>
+            <h2>Parent report</h2>
+            <div class="report-row">
+              <strong>Expected</strong>
+              <span>The red ball is under the table.</span>
+            </div>
+            <div class="report-row">
+              <strong>Spoken</strong>
+              <span>the red ball is under table</span>
+            </div>
+            <div class="report-row">
+              <strong>Word timeline</strong>
+              <div class="WordTimeline">
+                <div class="word"><span>the</span><span class="pill">matched</span></div>
+                <div class="word"><span>red</span><span class="pill">matched</span></div>
+                <div class="word"><span>ball</span><span class="pill">matched</span></div>
+                <div class="word"><span>is</span><span class="pill">matched</span></div>
+                <div class="word"><span>under</span><span class="pill">matched</span></div>
+                <div class="word missed"><span>the</span><span class="pill">missed</span></div>
+                <div class="word"><span>table</span><span class="pill">matched</span></div>
+              </div>
+            </div>
+            <div class="report-row">
+              <strong>Score breakdown</strong>
+              <div class="ScoreBreakdown">
+                <label class="meter">Completeness <div><span style="width: 86%"></span></div></label>
+                <label class="meter">Fluency <div><span style="width: 92%"></span></div></label>
+                <label class="meter">Audio quality <div><span style="width: 83%"></span></div></label>
+              </div>
+            </div>
+            <div class="report-row teacher-note">
+              The article before table appears skipped. Audio quality was acceptable.
+              This is educational practice feedback, not a clinical diagnosis.
+            </div>
+            <div class="report-row">
+              <strong>Full report insights</strong>
+              <div class="WordTimeline">
+                <div class="word variant"><span>Speech clarity</span><span class="pill">comfortable</span></div>
+                <div class="word"><span>Small word completion</span><span class="pill">practice</span></div>
+                <div class="word"><span>Working memory</span><span class="pill">developing</span></div>
+              </div>
+            </div>
+            <div class="report-row teacher-note">
+              Practice: listen to a sentence and repeat it with all small words.
+              This report is not an IQ test or diagnosis.
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const mic = document.querySelector("#micButton");
+      const bubble = document.querySelector("#recordingText");
+      const retry = document.querySelector("#retryCard");
+      const feedback = document.querySelector("#childFeedback");
+      const parentReport = document.querySelector("#parentReport");
+      const tabs = document.querySelectorAll("[data-mode]");
+      const ageButtons = document.querySelectorAll("[data-age]");
+      const promptText = document.querySelector(".prompt-text");
+      let listening = false;
+
+      mic.addEventListener("click", () => {
+        listening = !listening;
+        bubble.textContent = listening ? "Main sun raha hoon..." : "Great! Checking gently...";
+        feedback.textContent = listening
+          ? "BoloBuddy sun raha hai."
+          : "Nice try! Tumne most words clearly bole.";
+        retry.style.display = listening ? "none" : "block";
+      });
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((item) => item.classList.remove("active"));
+          tab.classList.add("active");
+          parentReport.hidden = tab.dataset.mode !== "parent";
+        });
+      });
+
+      ageButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          ageButtons.forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          const age = Number(button.dataset.age);
+          if (age <= 4) {
+            promptText.textContent = "Red ball.";
+            feedback.textContent = "Nice try! Tumne achha effort kiya.";
+          } else if (age <= 6) {
+            promptText.textContent = "I packed my school bag.";
+            feedback.textContent = "Super effort! Tumne sentence clearly bola.";
+          } else {
+            promptText.textContent = "I went to school, phir maine lunch khaya.";
+            feedback.textContent = "Great! Code-switch sentence kaafi clearly bola.";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

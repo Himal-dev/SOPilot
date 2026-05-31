@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sopilot"
+version = "0.1.0"
+description = "SOP + Copilot: a generic, SOP-driven agentic scaffold on LangGraph."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "SOPilot" }]
+dependencies = [
+    "langgraph>=1.2.2",
+    "langgraph-checkpoint-sqlite>=3.1.0",
+    "langchain-core>=1.4.0",
+    "pydantic>=2.13.4",
+    "PyYAML>=6.0.3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+app = ["fastapi>=0.115", "uvicorn>=0.30", "python-multipart>=0.0.9", "mangum>=0.19"]
+
+[project.scripts]
+sopilot = "sopilot.cli:main"
+
+[tool.setuptools]
+packages = [
+    "app",
+    "core",
+    "core.adapters",
+    "core.sop_compiler",
+    "core.state_runtime",
+    "core.planner",
+    "core.vision_adapter",
+    "core.voice_adapter",
+    "core.tool_router",
+    "core.evidence_ledger",
+    "core.human_review",
+    "core.output_generator",
+    "core.kids_voice_assessment",
+    "sopilot",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

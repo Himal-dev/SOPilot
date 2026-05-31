@@ -1,0 +1,75 @@
+batteries:
+  - battery_id: bolo_age_3_4_foundation
+    title: Ages 3-4 Foundation Voice And Language Play
+    age_min: 3
+    age_max: 4
+    estimated_minutes: 4
+    description: >
+      Short echo, naming, and one-step direction tasks for early speech clarity,
+      expressive vocabulary, receptive language, and listening attention.
+    prompt_ids:
+      - age3_4_repeat_red_ball
+      - age3_4_name_color_bag
+      - age3_4_follow_one_step
+    domains:
+      - speech_clarity
+      - expressive_language
+      - receptive_language
+      - vocabulary
+      - attention
+    report_focus:
+      - short utterance clarity
+      - familiar object words
+      - one-step instruction following
+      - attention to prompt
+
+  - battery_id: bolo_age_5_6_sentence_reasoning
+    title: Ages 5-6 Sentence, Sound, And Simple Why
+    age_min: 5
+    age_max: 6
+    estimated_minutes: 6
+    description: >
+      Short sentence repetition, target sound practice, and simple why-answer
+      tasks for language growth, phonological awareness, working memory, and
+      early reasoning.
+    prompt_ids:
+      - age5_6_sentence_school_bag
+      - age5_6_sound_robot_red
+      - age5_6_why_raincoat
+    domains:
+      - speech_clarity
+      - expressive_language
+      - phonological_awareness
+      - working_memory
+      - narrative_reasoning
+      - vocabulary
+    report_focus:
+      - sentence completion
+      - target sound awareness
+      - simple explanation
+      - confidence and fluency
+
+  - battery_id: bolo_age_7_8_code_switch_story
+    title: Ages 7-8 Code-Switch, Story, And Memory
+    age_min: 7
+    age_max: 8
+    estimated_minutes: 8
+    description: >
+      Longer sentences, Hinglish/code-switch reading, story sequencing, and
+      auditory working-memory tasks for older early-primary learners.
+    prompt_ids:
+      - age7_8_code_switch_lunch
+      - age7_8_story_sequence_space
+      - age7_8_memory_metro
+    domains:
+      - speech_clarity
+      - code_switch_control
+      - working_memory
+      - narrative_reasoning
+      - expressive_language
+      - processing_fluency
+    report_focus:
+      - code-switch handling
+      - small word completion
+      - story order
+      - longer sentence memory

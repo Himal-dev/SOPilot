@@ -1,0 +1,66 @@
+{
+  "tools": [
+    {
+      "name": "crm_lookup",
+      "description": "Look up a customer order by id in the CRM.",
+      "input_schema": {"type": "object", "properties": {"order_id": {"type": "string"}}}
+    },
+    {
+      "name": "payment_status",
+      "description": "Fetch the latest payment status for an order from the payments API.",
+      "input_schema": {"type": "object", "properties": {"order_id": {"type": "string"}}}
+    },
+    {
+      "name": "status_check",
+      "description": "Check the service status dashboard for active incidents.",
+      "input_schema": {"type": "object", "properties": {}}
+    },
+    {
+      "name": "kb_search",
+      "description": "Search the knowledge base for a matching error code.",
+      "input_schema": {"type": "object", "properties": {"error_code": {"type": "string"}}}
+    },
+    {
+      "name": "ticket_update",
+      "description": "Update a support ticket with the resolution and close it.",
+      "input_schema": {"type": "object", "properties": {"ticket_id": {"type": "string"}}}
+    }
+  ],
+  "resources": [
+    {"uri": "kb://payments/declines", "name": "Payment decline playbook"}
+  ],
+  "prompts": [
+    {"name": "customer_reply_tone", "description": "Empathetic support reply tone."}
+  ],
+  "responses": {
+    "crm_lookup": {
+      "order_id": "ORD-90871",
+      "customer": "Priya S.",
+      "amount_inr": 18999,
+      "channel": "web_checkout"
+    },
+    "payment_status": {
+      "state": "failed",
+      "error_code": "DECLINED_INSUFFICIENT_FUNDS",
+      "gateway": "razorpay",
+      "retryable": true
+    },
+    "status_check": {
+      "incident_active": true,
+      "incident_id": "INC-42",
+      "component": "payments-gateway",
+      "severity": "SEV2",
+      "since": "2026-05-30T05:10:00Z"
+    },
+    "kb_search": {
+      "article_id": "KB-1187",
+      "title": "Handling gateway-side payment declines during incidents",
+      "recommended_action": "Acknowledge incident, advise retry after resolution, do not re-bill."
+    },
+    "ticket_update": {
+      "ticket_id": "TKT-55012",
+      "state": "resolved",
+      "closed": true
+    }
+  }
+}

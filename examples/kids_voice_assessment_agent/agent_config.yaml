@@ -1,0 +1,274 @@
+name: kids_voice_assessment_agent
+description: >
+  BoloBuddy Voice Assessment: Hinglish-first, child-safe voice assessment for
+  modern Indian kids. Production mode uses real ElevenLabs STT and forced
+  alignment; fixture mode is only for local tests/demo.
+sop: sop.md
+sop_version: v1
+output_schema: output_schema.json
+
+adapters:
+  voice:
+    enabled: true
+    cues: sample_inputs/voice_cues.json
+
+mcp_servers:
+  - name: kids_voice_local
+    type: kids_voice_local
+
+hitl:
+  auto_approve: true
+  reject_triggers: []
+  reject_above_risk: null
+  reviewer: auto
+
+model:
+  compiler:
+    use_llm: false
+    api_key_env: OPENAI_API_KEY
+  max_steps: 100
+  budget_usd: 0.0
+
+app:
+  name: BoloBuddy Voice Assessment
+  locale_default: en-IN
+  supported_locales:
+    - en-IN
+    - hi-IN
+    - hinglish-IN
+  default_mode: child
+  product_positioning: "Hinglish-first child-safe voice assessment"
+
+runtime:
+  voice_provider: elevenlabs
+  production_requires_real_stt_alignment: true
+  allow_fixture_provider_for_local_demo: false
+
+ui:
+  theme: modern_minimal_warm
+  child_mode:
+    show_raw_scores: false
+    show_transcript: false
+    use_large_mic_button: true
+    use_soft_animations: true
+    use_reward_sounds: false
+    mascot_enabled: true
+    feedback_tone: hinglish_warm
+    max_text_length_child_feedback: 90
+    no_red_error_states: true
+  parent_mode:
+    show_raw_scores: true
+    show_word_timeline: true
+    show_phoneme_details: true
+    show_audio_replay: true
+    show_model_confidence: true
+  design_tokens:
+    border_radius: xl
+    density: spacious
+    font_style: rounded_readable
+    color_mood: soft_pastel
+    animation_level: calm
+
+assessment:
+  supported_modes:
+    - word_pronunciation
+    - sentence_reading
+    - phonics_practice
+    - story_reading
+    - expressive_speaking
+  default_mode: sentence_reading
+  age_bands:
+    - 3-4
+    - 5-6
+    - 7-8
+  requires_age_years_at_start: true
+  default_age_years: 5
+  require_real_voice_provider: true
+  age_batteries_file: assessment_batteries.yaml
+  prompt_types:
+    - word
+    - sentence
+    - phoneme
+    - story_line
+    - free_speech
+  language_modes:
+    - indian_english
+    - hindi
+    - hinglish
+    - code_switch
+  code_switch_policy: allow_common_hinglish
+  max_recording_seconds:
+    word_pronunciation: 8
+    sentence_reading: 20
+    story_reading: 60
+    expressive_speaking: 45
+  retries:
+    max_retries: 2
+    retry_if:
+      - no_speech_detected
+      - low_volume
+      - high_noise
+      - too_short
+      - clipping_detected
+
+elevenlabs:
+  enabled: true
+  provider: elevenlabs
+  stt:
+    enabled: true
+    model_id: scribe_v2
+    timestamps_granularity: word
+    use_realtime: false
+    use_language_detection: true
+    use_keyterms: true
+    enable_logging: false
+  audio_isolation:
+    enabled: true
+    only_if_noise_score_below: 0.72
+  forced_alignment:
+    enabled: true
+    use_reference_text: true
+  tts:
+    enabled: true
+    voice_profile_child_prompt: friendly_indian_english
+    voice_profile_parent: calm_teacher
+    use_pronunciation_dictionary: true
+  sound_effects:
+    enabled: false
+    reward_sound: soft_sparkle
+    duration_seconds: 0.6
+
+nlp:
+  normalize_hinglish: true
+  detect_language_per_token: true
+  detect_script_per_token: true
+  transliteration:
+    latin_hindi_to_devanagari: true
+    devanagari_to_latin: true
+  allowed_variants_file: prompts/allowed_hinglish_variants.json
+
+phonemes:
+  enabled: true
+  default_phone_set: ipa
+  fallback_phone_set: internal_simple
+  g2p_provider_order:
+    - custom_dictionary
+    - rule_based_hindi
+    - phonemizer
+    - epitran
+    - fallback_rules
+  phoneme_recognizer:
+    enabled: false
+    provider: allosaurus_or_local
+  accent_tolerance_profile: indian_english_default
+  target_phoneme_only_mode: false
+
+scoring:
+  developmental_labels:
+    - blooming
+    - practicing
+    - growing
+    - confident
+    - shining
+  weights:
+    sentence_reading:
+      word_accuracy: 0.30
+      completeness: 0.25
+      pronunciation: 0.20
+      fluency: 0.15
+      audio_quality: 0.05
+      confidence: 0.05
+    strict_reading:
+      word_accuracy: 0.40
+      completeness: 0.25
+      pronunciation: 0.20
+      fluency: 0.10
+      audio_quality: 0.025
+      confidence: 0.025
+    word_pronunciation:
+      target_sound: 0.45
+      word_match: 0.25
+      audio_quality: 0.10
+      confidence: 0.20
+    expressive_speaking:
+      fluency: 0.30
+      completeness: 0.20
+      clarity: 0.20
+      confidence: 0.20
+      audio_quality: 0.10
+  thresholds:
+    min_audio_quality: 0.55
+    min_stt_confidence: 0.55
+    min_alignment_confidence: 0.50
+    min_phoneme_confidence: 0.50
+    human_review_below_confidence: 0.45
+
+feedback:
+  default_child_tone: hinglish_warm
+  avoid_words:
+    - wrong
+    - bad
+    - poor
+    - failed
+    - problem child
+    - disorder
+    - abnormal
+  child_templates:
+    good_attempt: "Nice try! Tumne achha effort kiya."
+    retry_audio: "Mic ko thoda paas laao, phir se try karte hain."
+    missed_word: "Great effort! Ek chhota word miss hua - chalo fir se bolte hain."
+    target_sound: "Super! Ab '{sound}' sound ko slowly practice karte hain."
+  adult_report:
+    include_scores: true
+    include_evidence: true
+    include_uncertainty: true
+    include_practice_plan: true
+
+privacy:
+  requires_parental_consent: true
+  store_raw_audio: true
+  raw_audio_retention_days: 30
+  allow_delete_recording: true
+  redact_pii_in_transcripts: true
+  external_provider_allowed: true
+  audit_all_access: true
+
+human_review:
+  enabled: true
+  trigger_if:
+    - low_model_confidence
+    - repeated_low_score
+    - parent_requested
+    - sensitive_developmental_signal
+    - poor_audio_after_retries
+
+mcp:
+  enabled: true
+  servers:
+    hinglish_nlp:
+      enabled: true
+      transport: local
+    phoneme_g2p:
+      enabled: true
+      transport: local
+    pronunciation_assessment:
+      enabled: true
+      transport: local
+    curriculum:
+      enabled: true
+      transport: local
+    privacy_review:
+      enabled: true
+      transport: local
+    elevenlabs_adapter:
+      enabled: false
+      transport: http
+
+feature_flags:
+  realtime_stt: false
+  llm_feedback_generation: false
+  phoneme_recognizer: false
+  classroom_mode: false
+  specialist_mode: false
+  sound_rewards: false
+  parent_dashboard: true

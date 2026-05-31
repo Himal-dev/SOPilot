@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "plant_care_report",
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "Overall plant health summary."
+    },
+    "completed": {
+      "type": "boolean"
+    },
+    "plant": {
+      "type": "object",
+      "description": "Species/identity findings + photo evidence."
+    },
+    "symptoms": {
+      "type": "object",
+      "description": "Observed symptoms + close-up evidence."
+    },
+    "care_habits": {
+      "type": "object",
+      "description": "Gardener's spoken care habits."
+    },
+    "diagnosis": {
+      "type": "object",
+      "description": "Likely cause(s) with confidence."
+    },
+    "care_plan": {
+      "type": "object",
+      "description": "Recommended care actions."
+    },
+    "care_report": {
+      "type": "object",
+      "description": "Approved, submitted report record."
+    }
+  },
+  "required": ["summary", "completed", "plant", "symptoms", "care_report"]
+}

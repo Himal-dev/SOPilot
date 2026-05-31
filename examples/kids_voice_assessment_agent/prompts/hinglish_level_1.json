@@ -1,0 +1,103 @@
+{
+  "set_id": "hinglish_level_1",
+  "description": "Hinglish and code-switch level 1 prompts.",
+  "prompts": [
+    {
+      "prompt_id": "hinglish_l1_001",
+      "text": "Mera school bag ready hai.",
+      "display_text": "Mera school bag ready hai.",
+      "audio_prompt_text": "Mera school bag ready hai.",
+      "language_mode": "hinglish",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["mera", "school", "bag", "ready"],
+      "target_phonemes": ["/sk/"],
+      "allowed_variants": {
+        "school": ["iskool"],
+        "ready": ["redi"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hinglish_l1_002",
+      "text": "I went to school, phir maine lunch khaya.",
+      "display_text": "I went to school, phir maine lunch khaya.",
+      "audio_prompt_text": "I went to school, phir maine lunch khaya.",
+      "language_mode": "code_switch",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["went", "school", "phir", "lunch", "khaya"],
+      "target_phonemes": ["/sk/", "/kh/"],
+      "allowed_variants": {
+        "school": ["iskool"],
+        "lunch": ["tiffin", "lunchbox"],
+        "went": ["gaya", "gayi"],
+        "phir": ["fir"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hinglish_l1_003",
+      "text": "Mujhe robot wali story pasand hai.",
+      "display_text": "Mujhe robot wali story pasand hai.",
+      "audio_prompt_text": "Mujhe robot wali story pasand hai.",
+      "language_mode": "hinglish",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["mujhe", "robot", "story", "pasand"],
+      "target_phonemes": ["/r/"],
+      "allowed_variants": {
+        "story": ["kahani"],
+        "robot": ["robot"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hinglish_l1_004",
+      "text": "My dost has a red ball.",
+      "display_text": "My dost has a red ball.",
+      "audio_prompt_text": "My dost has a red ball.",
+      "language_mode": "hinglish",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["dost", "red", "ball"],
+      "target_phonemes": ["/r/"],
+      "allowed_variants": {
+        "dost": ["friend"],
+        "red": ["laal"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hinglish_l1_005",
+      "text": "Aaj maine ek space story read ki.",
+      "display_text": "Aaj maine ek space story read ki.",
+      "audio_prompt_text": "Aaj maine ek space story read ki.",
+      "language_mode": "code_switch",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["aaj", "space", "story", "read"],
+      "target_phonemes": ["/sp/", "/r/"],
+      "allowed_variants": {
+        "story": ["kahani"],
+        "read": ["padhi"]
+      },
+      "scoring_profile": "sentence_reading"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f8f3" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>SOPilot Plant Doctor</title>
+  <link rel="stylesheet" href="/styles.css?v=mobile-ui-20260531" />
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+  <script defer src="/config.js?v=mobile-ui-20260531"></script>
+  <script defer src="/app.js?v=mobile-ui-20260531"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">SOPilot live demo</p>
+      <h1>Plant Doctor</h1>
+    </div>
+    <p id="status" class="status" role="status" aria-live="polite">Preparing camera.</p>
+  </header>
+
+  <section id="authGate" class="auth-panel" aria-label="Private trial access" hidden>
+    <div>
+      <p class="eyebrow">Invite-only trial</p>
+      <h2>Enter access code</h2>
+      <p class="question">Plant Doctor uses live AI models and is open to invited testers only.</p>
+    </div>
+    <form id="authForm" class="auth-form">
+      <label for="accessCode" class="label">Access code</label>
+      <div class="auth-controls">
+        <input id="accessCode" name="accessCode" type="password" autocomplete="one-time-code" required />
+        <button type="submit">Unlock</button>
+      </div>
+      <p id="authError" class="auth-error" role="alert" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <main id="appShell" class="shell report-empty" hidden>
+    <section class="capture-panel" aria-label="Plant photo capture">
+      <div class="camera-wrap">
+        <video id="cam" autoplay playsinline muted></video>
+        <div id="cameraFallback" class="camera-fallback" hidden>Camera preview unavailable</div>
+      </div>
+      <canvas id="work" hidden></canvas>
+
+      <div class="shot-row">
+        <div>
+          <p class="label">Current shot</p>
+          <p id="prompt" class="prompt">Whole plant</p>
+        </div>
+      </div>
+
+      <div class="meter-grid" aria-label="Capture quality">
+        <div><span>Stability</span><strong id="stab">0</strong></div>
+        <div><span>Sharpness</span><strong id="sharp">0</strong></div>
+        <div><span>Plant</span><strong id="plant">No</strong></div>
+      </div>
+
+      <div id="thumbs" class="thumbs" aria-label="Captured shots"></div>
+
+      <div class="agent-row">
+        <div>
+          <p class="label">Voice guide</p>
+          <p id="agentState" class="question">Ready when you are.</p>
+        </div>
+        <button id="voiceGuideBtn" type="button">Start guide</button>
+      </div>
+      <div id="transcript" class="transcript" aria-label="Voice transcript"></div>
+
+      <div id="fallbackRow" class="question-row" hidden>
+        <div>
+          <p class="label">Backup</p>
+          <p class="question">Record care details if the voice guide is unavailable.</p>
+        </div>
+        <button id="recordBtn" type="button" disabled>Record</button>
+      </div>
+    </section>
+
+    <section id="result" class="result-panel" aria-label="Care report" hidden>
+      <div class="result-head">
+        <h2>Care report</h2>
+        <audio id="careAudio" controls hidden></audio>
+      </div>
+      <div id="report" class="report-body"></div>
+      <div class="actions" id="actions">
+        <button id="approve" type="button">Approve</button>
+        <button id="reject" type="button" class="danger">Reject</button>
+      </div>
+    </section>
+
+    <section class="about-panel" aria-label="About SOPilot">
+      <div>
+        <p class="eyebrow">About SOPilot</p>
+        <h2>Voice-first SOPs for real-world work</h2>
+      </div>
+      <p>
+        SOPilot turns a written operating procedure into a guided multimodal agent.
+        This Plant Doctor trial shows the pattern: collect evidence, ask only the
+        useful follow-ups, explain uncertainty, and produce an actionable report.
+      </p>
+      <nav class="about-links" aria-label="Creator links">
+        <a href="https://www.linkedin.com/in/himal-mangla/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://medium.com/@himalmangla" target="_blank" rel="noreferrer">Medium</a>
+        <a href="https://github.com/Himal-dev" target="_blank" rel="noreferrer">GitHub</a>
+      </nav>
+    </section>
+  </main>
+</body>
+</html>

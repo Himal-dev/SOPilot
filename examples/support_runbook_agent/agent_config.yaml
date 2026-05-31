@@ -1,0 +1,30 @@
+name: support_runbook_agent
+description: >
+  Headless payment-failure triage. Works entirely through MCP tools (CRM,
+  payments API, status dashboard, knowledge base, ticketing) and pauses for a
+  human before sending the customer response.
+sop: sop.md
+sop_version: v1
+output_schema: output_schema.json
+
+# Headless: no vision/voice adapters enabled.
+adapters: {}
+
+# MCP servers (here: local stub connectors backed by a canned catalog).
+mcp_servers:
+  - name: support_stack
+    type: stub
+    catalog: sample_inputs/mcp_support_stack.json
+
+hitl:
+  auto_approve: true          # non-interactive dry-run completes automatically
+  reject_triggers: []         # set to ["customer_response"] to demo a rejection
+  reject_above_risk: null
+  reviewer: auto
+
+model:
+  compiler:
+    use_llm: false            # deterministic local compiler; no API keys needed
+    api_key_env: OPENAI_API_KEY
+  max_steps: 50
+  budget_usd: 0.0

@@ -1,0 +1,98 @@
+{
+  "set_id": "indian_english_level_1",
+  "description": "Modern Indian English level 1 sentence prompts.",
+  "prompts": [
+    {
+      "prompt_id": "indian_english_l1_001",
+      "text": "The red ball is under the table.",
+      "display_text": "The red ball is under the table.",
+      "audio_prompt_text": "The red ball is under the table.",
+      "language_mode": "indian_english",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["red", "ball", "under", "table"],
+      "target_phonemes": ["/r/"],
+      "allowed_variants": {
+        "under": ["ke under", "neeche"],
+        "red": ["laal"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "indian_english_l1_002",
+      "text": "I packed my school bag.",
+      "display_text": "I packed my school bag.",
+      "audio_prompt_text": "I packed my school bag.",
+      "language_mode": "indian_english",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["packed", "school", "bag"],
+      "target_phonemes": ["/sk/"],
+      "allowed_variants": {
+        "school": ["iskool"],
+        "bag": ["school bag"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "indian_english_l1_003",
+      "text": "The robot stopped at the red light.",
+      "display_text": "The robot stopped at the red light.",
+      "audio_prompt_text": "The robot stopped at the red light.",
+      "language_mode": "indian_english",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["robot", "stopped", "red", "light"],
+      "target_phonemes": ["/r/", "/st/"],
+      "allowed_variants": {
+        "red": ["laal"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "indian_english_l1_004",
+      "text": "My friend gave me a blue pencil.",
+      "display_text": "My friend gave me a blue pencil.",
+      "audio_prompt_text": "My friend gave me a blue pencil.",
+      "language_mode": "indian_english",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["friend", "blue", "pencil"],
+      "target_phonemes": ["/fr/", "/bl/"],
+      "allowed_variants": {
+        "friend": ["dost"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "indian_english_l1_005",
+      "text": "We saw the moon after dinner.",
+      "display_text": "We saw the moon after dinner.",
+      "audio_prompt_text": "We saw the moon after dinner.",
+      "language_mode": "indian_english",
+      "script": "latin",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["moon", "after", "dinner"],
+      "target_phonemes": ["/m/"],
+      "allowed_variants": {
+        "moon": ["chaand"]
+      },
+      "scoring_profile": "sentence_reading"
+    }
+  ]
+}

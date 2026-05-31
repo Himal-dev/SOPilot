@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "move_in_condition_report",
+  "type": "object",
+  "properties": {
+    "summary": {"type": "string", "description": "Overall condition summary."},
+    "completed": {"type": "boolean"},
+    "living_room": {"type": "object", "description": "Living room condition + photo."},
+    "living_room_notes": {"type": "object", "description": "Tenant's spoken notes."},
+    "kitchen": {"type": "object"},
+    "kitchen_notes": {"type": "object"},
+    "bathroom": {"type": "object"},
+    "meters": {"type": "object", "description": "Utility meter readings + photo."},
+    "meter_confirmation": {"type": "object"},
+    "condition_report": {"type": "object", "description": "Final submitted report."}
+  },
+  "required": ["summary", "completed", "living_room", "kitchen", "bathroom", "meters"]
+}

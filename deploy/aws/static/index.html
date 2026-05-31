@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BoloBuddy Voice Assessment</title>
+    <script>
+      window.BOLOBUDDY_API_URL = "__API_URL__";
+      window.BOLOBUDDY_APP_TOKEN = "__APP_TOKEN__";
+    </script>
+    <style>
+      :root {
+        --ink: #1f302c;
+        --muted: #65736f;
+        --paper: #fffdf8;
+        --panel: #ffffff;
+        --line: #dce6df;
+        --mint: #c9f3df;
+        --sky: #cfe9ff;
+        --sun: #ffe69b;
+        --coral: #ffb7a8;
+        --leaf: #4f9f78;
+        --soft: #f4f8f2;
+        --shadow: 0 18px 45px rgba(35, 54, 48, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family:
+          ui-rounded, "Avenir Next", "Nunito", system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          linear-gradient(180deg, rgba(207, 233, 255, 0.45), transparent 380px),
+          var(--paper);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .app {
+        min-height: 100vh;
+        padding: 22px;
+      }
+
+      .shell {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+
+      .brand {
+        display: flex;
+        gap: 13px;
+        align-items: center;
+      }
+
+      .mascot {
+        width: 56px;
+        height: 56px;
+        border-radius: 44% 56% 49% 51%;
+        background:
+          radial-gradient(circle at 35% 38%, #1f302c 0 3px, transparent 4px),
+          radial-gradient(circle at 64% 38%, #1f302c 0 3px, transparent 4px),
+          radial-gradient(circle at 50% 63%, #1f302c 0 9px, transparent 10px),
+          var(--sun);
+        box-shadow: inset 0 -8px 0 rgba(255, 183, 168, 0.5);
+        flex: 0 0 auto;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.55rem, 4vw, 2.85rem);
+        line-height: 1.05;
+        letter-spacing: 0;
+      }
+
+      h2 {
+        margin: 0 0 10px;
+        font-size: 1.22rem;
+        letter-spacing: 0;
+      }
+
+      .sub {
+        margin: 5px 0 0;
+        color: var(--muted);
+      }
+
+      .tabs {
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: 999px;
+      }
+
+      .tabs button {
+        min-height: 42px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        padding: 0 16px;
+        cursor: pointer;
+      }
+
+      .tabs button.active {
+        background: var(--ink);
+        color: #ffffff;
+      }
+
+      .start {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 14px;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+        margin-bottom: 22px;
+      }
+
+      .field-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 0.88rem;
+      }
+
+      input {
+        min-height: 44px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 0 12px;
+        color: var(--ink);
+        background: var(--soft);
+      }
+
+      .age-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .age-buttons button,
+      .primary,
+      .ghost {
+        min-height: 44px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 0 16px;
+        cursor: pointer;
+        color: var(--ink);
+      }
+
+      .age-buttons button {
+        min-width: 52px;
+        background: var(--soft);
+        font-weight: 800;
+      }
+
+      .age-buttons button.active {
+        background: var(--mint);
+        border-color: #85cda4;
+      }
+
+      .primary {
+        background: var(--ink);
+        color: #ffffff;
+        border-color: var(--ink);
+        font-weight: 800;
+      }
+
+      .ghost {
+        background: var(--panel);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(330px, 430px);
+        gap: 22px;
+        align-items: start;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .practice {
+        padding: clamp(24px, 5vw, 44px);
+        min-height: 440px;
+        display: grid;
+        gap: 24px;
+        align-content: center;
+      }
+
+      .prompt-kicker,
+      .small {
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .prompt {
+        font-size: clamp(2rem, 6vw, 4.5rem);
+        line-height: 1.08;
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      .recorder {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .mic {
+        width: 146px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 0;
+        background:
+          radial-gradient(circle at 50% 37%, #ffffff 0 18px, transparent 19px),
+          linear-gradient(160deg, var(--coral), var(--sun));
+        color: var(--ink);
+        box-shadow: 0 18px 42px rgba(255, 129, 105, 0.24);
+        font-weight: 900;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .mic::before {
+        content: "";
+        width: 30px;
+        height: 46px;
+        border: 4px solid var(--ink);
+        border-top-width: 7px;
+        border-radius: 18px;
+        position: absolute;
+        top: 42px;
+        left: calc(50% - 15px);
+      }
+
+      .mic::after {
+        content: "";
+        width: 58px;
+        height: 34px;
+        border: 4px solid var(--ink);
+        border-top: 0;
+        border-radius: 0 0 34px 34px;
+        position: absolute;
+        top: 78px;
+        left: calc(50% - 29px);
+      }
+
+      .mic span {
+        position: absolute;
+        inset: auto 0 22px;
+      }
+
+      .bubble {
+        min-height: 72px;
+        padding: 18px 20px;
+        border-radius: 22px;
+        background: var(--soft);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-weight: 800;
+      }
+
+      .wave {
+        display: flex;
+        gap: 5px;
+        height: 38px;
+        align-items: center;
+      }
+
+      .wave i {
+        width: 7px;
+        border-radius: 999px;
+        background: var(--leaf);
+        animation: wave 1.1s ease-in-out infinite;
+      }
+
+      .wave i:nth-child(1) { height: 14px; animation-delay: 0s; }
+      .wave i:nth-child(2) { height: 28px; animation-delay: 0.08s; }
+      .wave i:nth-child(3) { height: 20px; animation-delay: 0.16s; }
+      .wave i:nth-child(4) { height: 34px; animation-delay: 0.24s; }
+      .wave i:nth-child(5) { height: 18px; animation-delay: 0.32s; }
+
+      @keyframes wave {
+        0%, 100% { transform: scaleY(0.55); opacity: 0.55; }
+        50% { transform: scaleY(1); opacity: 1; }
+      }
+
+      .panel {
+        padding: 22px;
+      }
+
+      .stack {
+        display: grid;
+        gap: 14px;
+      }
+
+      .task-list {
+        display: grid;
+        gap: 9px;
+      }
+
+      .task {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--soft);
+      }
+
+      .pill {
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: #ffffff;
+        color: var(--muted);
+        white-space: nowrap;
+        font-size: 0.82rem;
+      }
+
+      .pill.ready { background: var(--mint); color: var(--ink); }
+      .pill.review { background: #fff3c4; color: var(--ink); }
+
+      .report {
+        display: grid;
+        gap: 16px;
+      }
+
+      .report-section {
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+      }
+
+      .domain-grid,
+      .admin-grid {
+        display: grid;
+        gap: 10px;
+      }
+
+      .domain,
+      .admin-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        padding: 12px;
+        border-radius: 16px;
+        background: var(--soft);
+      }
+
+      .hidden { display: none !important; }
+
+      .notice {
+        padding: 14px;
+        border-radius: 18px;
+        background: #fff8dc;
+        color: #665826;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 880px) {
+        .app { padding: 16px; }
+        header { flex-direction: column; align-items: flex-start; }
+        .start { grid-template-columns: 1fr; }
+        .grid { grid-template-columns: 1fr; }
+        .practice { min-height: 360px; }
+        .mic { width: 132px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <div class="shell">
+        <header>
+          <div class="brand">
+            <div class="mascot" aria-hidden="true"></div>
+            <div>
+              <h1>Chalo bolke practice karte hain!</h1>
+              <p class="sub">BoloBuddy Voice Assessment</p>
+            </div>
+          </div>
+          <nav class="tabs" aria-label="View mode">
+            <button class="active" type="button" data-view="assessment">Assessment</button>
+            <button type="button" data-view="admin">Admin</button>
+          </nav>
+        </header>
+
+        <section class="start card" id="assessmentStart">
+          <div class="field-row">
+            <label>
+              Child ID
+              <input id="childId" value="demo_child" autocomplete="off" />
+            </label>
+            <label>
+              Age
+              <div class="age-buttons" id="ageButtons">
+                <button type="button" data-age="3">3</button>
+                <button type="button" data-age="4">4</button>
+                <button class="active" type="button" data-age="5">5</button>
+                <button type="button" data-age="6">6</button>
+                <button type="button" data-age="7">7</button>
+                <button type="button" data-age="8">8</button>
+              </div>
+            </label>
+          </div>
+          <button class="primary" type="button" id="startButton">Start</button>
+        </section>
+
+        <section class="grid" id="assessmentView">
+          <div class="stack">
+            <article class="practice card">
+              <div>
+                <div class="prompt-kicker" id="taskKicker">Age-based warmup</div>
+                <p class="prompt" id="promptText">Choose age and start.</p>
+              </div>
+              <div class="recorder">
+                <button class="mic" type="button" id="recordButton" aria-label="Record prompt" disabled>
+                  <span id="recordLabel">Tap</span>
+                </button>
+                <div class="bubble">
+                  <div class="wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+                  <span id="recordingText">Ready jab tum ready ho.</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <button class="ghost" type="button" id="prevButton">Back</button>
+                <button class="primary" type="button" id="nextButton">Next</button>
+                <button class="primary" type="button" id="submitButton">Run full report</button>
+              </div>
+            </article>
+
+            <article class="card panel report hidden" id="reportCard">
+              <h2>Child feedback</h2>
+              <p id="childFeedback" class="small"></p>
+              <div class="report-section">
+                <h2>Parent report</h2>
+                <p id="adultFeedback" class="small"></p>
+              </div>
+              <div class="report-section">
+                <h2>Insights</h2>
+                <div class="domain-grid" id="insights"></div>
+              </div>
+              <div class="report-section">
+                <h2>Practice suggestions</h2>
+                <div class="domain-grid" id="exercises"></div>
+              </div>
+              <div class="notice">
+                This report is educational practice feedback. It is not an IQ test,
+                clinical diagnosis, or measure of a child's worth.
+              </div>
+            </article>
+          </div>
+
+          <aside class="card panel stack">
+            <h2>Battery</h2>
+            <p class="small" id="batteryLabel">Age-selected questions appear here.</p>
+            <div class="task-list" id="taskList"></div>
+            <div class="notice hidden" id="providerNotice">
+              Real assessment needs the ElevenLabs API key configured on the backend.
+            </div>
+          </aside>
+        </section>
+
+        <section class="card panel hidden" id="adminView">
+          <div class="field-row" style="justify-content: space-between;">
+            <div>
+              <h2>Admin dashboard</h2>
+              <p class="small">Sessions, reports, review state, and S3-backed evidence.</p>
+            </div>
+            <label>
+              Admin token
+              <input id="adminToken" type="password" placeholder="Paste token" />
+            </label>
+            <button class="primary" type="button" id="loadAdmin">Load</button>
+          </div>
+          <div class="admin-grid" id="adminRows"></div>
+          <article class="report-section hidden" id="adminDetail">
+            <h2>Selected report</h2>
+            <pre id="adminJson" style="white-space: pre-wrap; overflow:auto; background: var(--soft); border-radius:16px; padding:14px;"></pre>
+          </article>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      const apiBase = (window.BOLOBUDDY_API_URL || "").replace(/\/$/, "");
+      const appToken = window.BOLOBUDDY_APP_TOKEN || "";
+      const hasAppToken = appToken && !appToken.startsWith("_");
+      const state = {
+        age: 5,
+        session: null,
+        battery: null,
+        prompts: [],
+        taskIndex: 0,
+        recordings: {},
+        mediaRecorder: null,
+        chunks: [],
+      };
+
+      const $ = (selector) => document.querySelector(selector);
+      const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+      const views = {
+        assessment: $("#assessmentView"),
+        admin: $("#adminView"),
+      };
+
+      $("[data-view='assessment']").addEventListener("click", () => switchView("assessment"));
+      $("[data-view='admin']").addEventListener("click", () => switchView("admin"));
+      $("#startButton").addEventListener("click", startSession);
+      $("#recordButton").addEventListener("click", toggleRecording);
+      $("#prevButton").addEventListener("click", () => moveTask(-1));
+      $("#nextButton").addEventListener("click", () => moveTask(1));
+      $("#submitButton").addEventListener("click", submitAssessment);
+      $("#loadAdmin").addEventListener("click", loadAdmin);
+
+      $$("#ageButtons button").forEach((button) => {
+        button.addEventListener("click", () => {
+          $$("#ageButtons button").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          state.age = Number(button.dataset.age);
+        });
+      });
+
+      init();
+
+      async function init() {
+        if (!apiBase || apiBase.startsWith("_")) {
+          $("#providerNotice").textContent = "Deployment config missing API URL.";
+          $("#providerNotice").classList.remove("hidden");
+          return;
+        }
+        try {
+          const config = await api("/config");
+          if (!config.provider_ready) {
+            $("#providerNotice").classList.remove("hidden");
+          }
+          if (config.app_token_required && !hasAppToken) {
+            $("#providerNotice").textContent = "Deployment config missing app token.";
+            $("#providerNotice").classList.remove("hidden");
+          }
+        } catch (error) {
+          showStatus("Could not reach backend yet.");
+        }
+      }
+
+      function switchView(name) {
+        $$("[data-view]").forEach((button) => button.classList.toggle("active", button.dataset.view === name));
+        views.assessment.classList.toggle("hidden", name !== "assessment");
+        $("#assessmentStart").classList.toggle("hidden", name !== "assessment");
+        views.admin.classList.toggle("hidden", name !== "admin");
+      }
+
+      async function startSession() {
+        const childId = $("#childId").value.trim() || "demo_child";
+        const response = await api("/sessions", {
+          method: "POST",
+          body: { child_id: childId, age_years: state.age, consent_verified: true },
+        });
+        state.session = response.session;
+        state.battery = response.battery;
+        state.prompts = response.prompts;
+        state.taskIndex = 0;
+        state.recordings = {};
+        $("#recordButton").disabled = false;
+        $("#reportCard").classList.add("hidden");
+        renderTask();
+      }
+
+      function renderTask() {
+        const prompt = state.prompts[state.taskIndex];
+        if (!prompt) return;
+        $("#taskKicker").textContent = `${state.battery.title} · ${state.taskIndex + 1}/${state.prompts.length}`;
+        $("#promptText").textContent = prompt.display_text || prompt.text;
+        $("#batteryLabel").textContent = `${state.battery.title}. ${state.battery.domains.join(", ")}.`;
+        $("#recordingText").textContent = state.recordings[prompt.prompt_id] ? "Recording saved." : "Ready jab tum ready ho.";
+        $("#recordLabel").textContent = state.recordings[prompt.prompt_id] ? "Again" : "Tap";
+        $("#taskList").innerHTML = state.prompts.map((item, index) => `
+          <div class="task">
+            <span>${index + 1}. ${escapeHtml(item.display_text || item.text)}</span>
+            <span class="pill ${state.recordings[item.prompt_id] ? "ready" : ""}">
+              ${state.recordings[item.prompt_id] ? "saved" : item.assessment_mode}
+            </span>
+          </div>
+        `).join("");
+      }
+
+      function moveTask(delta) {
+        if (!state.prompts.length) return;
+        state.taskIndex = Math.max(0, Math.min(state.prompts.length - 1, state.taskIndex + delta));
+        renderTask();
+      }
+
+      async function toggleRecording() {
+        if (state.mediaRecorder && state.mediaRecorder.state === "recording") {
+          state.mediaRecorder.stop();
+          $("#recordingText").textContent = "Checking recording...";
+          return;
+        }
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        state.chunks = [];
+        state.mediaRecorder = new MediaRecorder(stream);
+        state.mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size) state.chunks.push(event.data);
+        };
+        state.mediaRecorder.onstop = async () => {
+          stream.getTracks().forEach((track) => track.stop());
+          const blob = new Blob(state.chunks, { type: state.mediaRecorder.mimeType || "audio/webm" });
+          const prompt = state.prompts[state.taskIndex];
+          state.recordings[prompt.prompt_id] = {
+            prompt_id: prompt.prompt_id,
+            mime_type: blob.type || "audio/webm",
+            audio_base64: await blobToBase64(blob),
+          };
+          renderTask();
+        };
+        state.mediaRecorder.start();
+        $("#recordingText").textContent = "Main sun raha hoon...";
+        $("#recordLabel").textContent = "Stop";
+      }
+
+      async function submitAssessment() {
+        if (!state.session) return showStatus("Start a session first.");
+        const tasks = Object.values(state.recordings);
+        if (!tasks.length) return showStatus("Record at least one prompt.");
+        $("#recordingText").textContent = "Running real STT and alignment...";
+        const response = await api(`/sessions/${state.session.session_id}/assess`, {
+          method: "POST",
+          body: { tasks },
+        });
+        renderReport(response.report);
+      }
+
+      function renderReport(report) {
+        $("#reportCard").classList.remove("hidden");
+        $("#childFeedback").textContent = report.feedback.child_feedback;
+        $("#adultFeedback").textContent = report.feedback.adult_feedback;
+        $("#insights").innerHTML = report.insights.map((item) => `
+          <div class="domain">
+            <span><strong>${escapeHtml(item.label)}</strong><br><span class="small">${escapeHtml(item.summary)}</span></span>
+            <span class="pill ${item.severity === "review" ? "review" : ""}">${item.severity}</span>
+          </div>
+        `).join("");
+        $("#exercises").innerHTML = report.exercises.map((item) => `
+          <div class="domain">
+            <span><strong>${escapeHtml(item.skill)}</strong><br><span class="small">${escapeHtml(item.activity)}</span></span>
+            <span class="pill">${item.priority}</span>
+          </div>
+        `).join("");
+      }
+
+      async function loadAdmin() {
+        const token = $("#adminToken").value.trim();
+        const response = await api("/admin/sessions", { headers: { "x-admin-token": token } });
+        $("#adminRows").innerHTML = response.sessions.map((session) => `
+          <button class="admin-row" type="button" data-session="${session.session_id}">
+            <span>
+              <strong>${escapeHtml(session.child_id)}</strong><br>
+              <span class="small">${session.age_band || session.age_years} · ${session.status}</span>
+            </span>
+            <span class="pill ${session.needs_human_review ? "review" : ""}">
+              ${session.needs_human_review ? "review" : session.developmental_level || "created"}
+            </span>
+          </button>
+        `).join("");
+        $$("#adminRows [data-session]").forEach((row) => {
+          row.addEventListener("click", async () => {
+            const detail = await api(`/admin/sessions/${row.dataset.session}`, {
+              headers: { "x-admin-token": token },
+            });
+            $("#adminDetail").classList.remove("hidden");
+            $("#adminJson").textContent = JSON.stringify(detail, null, 2);
+          });
+        });
+      }
+
+      async function api(path, options = {}) {
+        const needsAppToken =
+          path === "/sessions" ||
+          path.startsWith("/sessions/") ||
+          path.includes("/assess");
+        const headers = {
+          ...(options.body ? { "content-type": "application/json" } : {}),
+          ...(needsAppToken && hasAppToken ? { "x-app-token": appToken } : {}),
+          ...(options.headers || {}),
+        };
+        const response = await fetch(apiBase + path, {
+          method: options.method || "GET",
+          headers,
+          body: options.body ? JSON.stringify(options.body) : undefined,
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw showStatus(payload.message || payload.error || "Request failed.");
+        }
+        return payload;
+      }
+
+      function blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      }
+
+      function showStatus(message) {
+        $("#recordingText").textContent = message;
+        return new Error(message);
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+    </script>
+  </body>
+</html>

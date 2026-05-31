@@ -1,0 +1,48 @@
+{
+  "scenarios": [
+    {
+      "scenario_id": "word_skip_article",
+      "reference": "The red ball is under the table.",
+      "spoken": "the red ball is under table",
+      "word_timestamps": [
+        {"word": "the", "start_ms": 120, "end_ms": 260, "confidence": 0.84},
+        {"word": "red", "start_ms": 430, "end_ms": 640, "confidence": 0.86},
+        {"word": "ball", "start_ms": 810, "end_ms": 1050, "confidence": 0.87},
+        {"word": "is", "start_ms": 1220, "end_ms": 1360, "confidence": 0.81},
+        {"word": "under", "start_ms": 1540, "end_ms": 1900, "confidence": 0.82},
+        {"word": "table", "start_ms": 2170, "end_ms": 2580, "confidence": 0.83}
+      ],
+      "expected": {
+        "missed_words": ["the"],
+        "adult_note": "The article before table appears skipped."
+      }
+    },
+    {
+      "scenario_id": "iskool_variant",
+      "reference": "Mera school bag ready hai.",
+      "spoken": "mera iskool bag ready hai",
+      "expected": {
+        "variant": {"school": "iskool"},
+        "adult_note": "Recognize iskool as a configured Indian/Hinglish variant for school."
+      }
+    },
+    {
+      "scenario_id": "code_switch_skips",
+      "reference": "I went to school, phir maine lunch khaya.",
+      "spoken": "I went school phir lunch khaya",
+      "expected": {
+        "missed_words": ["to", "maine"],
+        "adult_note": "Code-switching recognized; fluency is moderate."
+      }
+    },
+    {
+      "scenario_id": "low_volume_no_speech",
+      "reference": "The red ball is under the table.",
+      "spoken": "",
+      "expected": {
+        "quality_status": "retry",
+        "child_feedback": "Mic ko thoda paas laao, phir se try karte hain."
+      }
+    }
+  ]
+}

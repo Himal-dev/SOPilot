@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "kids_voice_assessment_result",
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "Run summary with evidence-backed observations."
+    },
+    "completed": {
+      "type": "boolean",
+      "description": "Whether the SOP completed."
+    },
+    "assessment_config": {
+      "type": "object",
+      "description": "Loaded prompt, mode, language, privacy, and threshold config."
+    },
+    "assessment_battery": {
+      "type": "object",
+      "description": "Age-based assessment battery selected from user-provided age at start."
+    },
+    "prompt_presentation": {
+      "type": "object",
+      "description": "Child-facing prompt card presentation state."
+    },
+    "prompt_audio": {
+      "type": "object",
+      "description": "Optional prompt playback audio metadata."
+    },
+    "recording": {
+      "type": "object",
+      "description": "Raw recording reference and capture metadata."
+    },
+    "audio_quality": {
+      "type": "object",
+      "description": "Volume, noise, VAD, retry, and quality status."
+    },
+    "cleaned_audio": {
+      "type": "object",
+      "description": "Optional cleaned audio reference."
+    },
+    "transcript": {
+      "type": "object",
+      "description": "STT transcript, word timestamps, language confidence, and evidence."
+    },
+    "hinglish_nlp": {
+      "type": "object",
+      "description": "Normalized reference/spoken text and token-level language/script tags."
+    },
+    "reference_variants": {
+      "type": "object",
+      "description": "Prompt-scoped accepted variants for Hinglish/code-switching."
+    },
+    "alignment": {
+      "type": "object",
+      "description": "Reference-guided word/character alignment and uncertain spans."
+    },
+    "phoneme_analysis": {
+      "type": "object",
+      "description": "Expected phonemes, hypothesis, target issues, and tolerance profile."
+    },
+    "scores": {
+      "type": "object",
+      "description": "Gentle multi-dimensional scores and developmental label."
+    },
+    "task_results": {
+      "type": "array",
+      "description": "Per-prompt results when an age-selected assessment battery is run."
+    },
+    "feedback": {
+      "type": "object",
+      "description": "Separated child/adult feedback and suggested practice."
+    },
+    "persistence": {
+      "type": "object",
+      "description": "Persistence and audit status."
+    },
+    "human_review": {
+      "type": "object",
+      "description": "Human review routing state and reason."
+    },
+    "child_result": {
+      "type": "object",
+      "description": "Child-safe result payload with no raw percentages."
+    },
+    "adult_report": {
+      "type": "object",
+      "description": "Parent/teacher report with evidence, uncertainty, and scores."
+    },
+    "full_report": {
+      "type": "object",
+      "description": "Full educational report with domain insights, uncertainty, and exercises."
+    }
+  },
+  "required": [
+    "summary",
+    "completed",
+    "feedback",
+    "child_result",
+    "adult_report",
+    "full_report"
+  ]
+}

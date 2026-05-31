@@ -1,0 +1,74 @@
+{
+  "summary": "BoloBuddy mock run for hinglish_l1_002 recognized code-switching and two skipped function words.",
+  "completed": true,
+  "feedback": {
+    "child_feedback": "Great effort! Ek chhota word miss hua - chalo fir se bolte hain.",
+    "adult_feedback": "The child completed 6/8 expected words. Skipped word(s): to, maine. Fluency was growing with confidence 0.75. This is an educational assessment, not a clinical diagnosis.",
+    "suggested_practice": [
+      "Read once with finger tracking so small words are not skipped."
+    ],
+    "should_suppress_child_feedback": false
+  },
+  "child_result": {
+    "mode": "child",
+    "feedback": "Great effort! Ek chhota word miss hua - chalo fir se bolte hain.",
+    "developmental_level": "growing",
+    "show_raw_scores": false
+  },
+  "adult_report": {
+    "mode": "adult",
+    "expected_text": "I went to school, phir maine lunch khaya.",
+    "spoken_transcript": "I went school phir lunch khaya",
+    "missed_words": ["to", "maine"],
+    "changed_words": [],
+    "token_language_tags": [
+      {"text": "i", "language": "en"},
+      {"text": "went", "language": "en"},
+      {"text": "school", "language": "hinglish"},
+      {"text": "phir", "language": "hi"},
+      {"text": "lunch", "language": "en"},
+      {"text": "khaya", "language": "hi"}
+    ],
+    "scores": {
+      "word_accuracy": 0.75,
+      "reference_completeness": 0.75,
+      "phoneme_accuracy": 0.74,
+      "fluency_score": 0.78,
+      "audio_quality_score": 0.775,
+      "overall_score": 0.75,
+      "developmental_level": "growing"
+    },
+    "uncertainty": [
+      "Code-switch language tags are rule-based and should be reviewed for edge cases."
+    ],
+    "needs_human_review": false
+  },
+  "full_report": {
+    "title": "BoloBuddy Voice Assessment Report",
+    "summary": "Educational observations from a code-switched sentence task.",
+    "battery_id": "bolo_age_7_8_code_switch_story",
+    "domains": {
+      "code_switch_control": {"level": "developing", "score": 0.76},
+      "working_memory": {"level": "developing", "score": 0.75},
+      "processing_fluency": {"level": "comfortable", "score": 0.78}
+    },
+    "insights": [
+      {
+        "domain": "code_switch_control",
+        "label": "Code-switch sentence completion",
+        "summary": "Code-switching was recognized; small connector words need practice.",
+        "confidence": 0.75,
+        "severity": "practice"
+      }
+    ],
+    "exercises": [
+      {
+        "skill": "Code-switch sentence completion",
+        "activity": "Read one Hinglish sentence slowly, then explain it in your own words.",
+        "mode": "home_practice",
+        "priority": "medium"
+      }
+    ],
+    "disclaimer": "This is an educational report, not an IQ test or clinical diagnosis."
+  }
+}

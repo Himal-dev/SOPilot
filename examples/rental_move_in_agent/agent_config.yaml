@@ -1,0 +1,32 @@
+name: rental_move_in_agent
+description: >
+  Voice + vision move-in inspection. Photographs each area and captures the
+  tenant's spoken confirmations, then pauses before submitting a deposit-ready
+  condition report.
+sop: sop.md
+sop_version: v1
+output_schema: output_schema.json
+
+adapters:
+  vision:
+    enabled: true
+    cues: sample_inputs/vision_cues.json
+  voice:
+    enabled: true
+    cues: sample_inputs/voice_cues.json
+
+# No external tools for this example.
+mcp_servers: []
+
+hitl:
+  auto_approve: true
+  reject_triggers: []
+  reject_above_risk: null
+  reviewer: auto
+
+model:
+  compiler:
+    use_llm: false
+    api_key_env: OPENAI_API_KEY
+  max_steps: 50
+  budget_usd: 0.0

@@ -1,0 +1,44 @@
+{
+  "capture_the_front_of_the_vehicle_including_bumpe": {
+    "summary": "Front: medium scratch on bumper, both headlights intact, grille clean.",
+    "confidence": 0.87,
+    "content": {"bumper": "medium_scratch", "headlights": "ok", "repair_cost_inr": 2500},
+    "evidence_refs": ["front_photo"]
+  },
+  "capture_the_rear_of_the_vehicle_including_the_bo": {
+    "summary": "Rear: small dent on boot lid, tail lights working.",
+    "confidence": 0.84,
+    "content": {"boot": "small_dent", "tail_lights": "ok", "repair_cost_inr": 1800},
+    "evidence_refs": ["rear_photo"]
+  },
+  "capture_the_left_side_panels_doors_and_mirror": {
+    "summary": "Left side: panels clean, driver door has light swirl marks.",
+    "confidence": 0.86,
+    "content": {"panels": "ok", "door": "swirl_marks"},
+    "evidence_refs": ["left_photo"]
+  },
+  "capture_the_right_side_panels_doors_and_mirror": {
+    "summary": "Right side: rear door repainted (paint thickness anomaly detected).",
+    "confidence": 0.79,
+    "content": {"panels": "repaint_suspected", "repaint": true},
+    "evidence_refs": ["right_photo"]
+  },
+  "inspect_and_photograph_each_tyre_tread_and_sidew": {
+    "summary": "Tyres: front-left tread is low (~1.5mm); others acceptable.",
+    "confidence": 0.81,
+    "content": {"tread_depth_mm": 1.5, "sidewall": "ok", "uneven_wear": true},
+    "evidence_refs": ["tyre_photo_fl", "tyre_photo_fr"]
+  },
+  "capture_the_dashboard_seats_and_odometer_reading": {
+    "summary": "Interior: clean, odometer reads 58,420 km, no warning lights.",
+    "confidence": 0.9,
+    "content": {"odometer_km": 58420, "warning_lights": false},
+    "evidence_refs": ["interior_photo"]
+  },
+  "open_the_bonnet_and_capture_the_engine_bay_and_f": {
+    "summary": "Engine bay: glare on coolant reservoir, fluid level unclear (recapture advised).",
+    "confidence": 0.62,
+    "content": {"oil": "ok", "coolant": "unclear", "capture_quality": "glare"},
+    "evidence_refs": ["engine_photo"]
+  }
+}

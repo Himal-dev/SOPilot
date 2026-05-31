@@ -1,0 +1,14 @@
+{
+  "ask_the_gardener_about_care_habits_and_recent_ch": {
+    "summary": "Watering daily in low indoor light, drainage is unclear, and the plant was recently moved near a colder window.",
+    "confidence": 0.82,
+    "content": {
+      "transcript": "I water it every day. It sits in low indoor light. I am not sure the pot drains well. I moved it near a colder window last week.",
+      "watering": "daily",
+      "light_location": "low indoor light",
+      "drainage_soil": "drainage unclear",
+      "recent_changes_pests": "moved near a colder window last week"
+    },
+    "evidence_refs": ["care_habits_audio"]
+  }
+}

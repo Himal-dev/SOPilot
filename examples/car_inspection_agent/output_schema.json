@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "vehicle_inspection_report",
+  "type": "object",
+  "properties": {
+    "summary": {"type": "string", "description": "Inspection summary for pricing/QC."},
+    "completed": {"type": "boolean"},
+    "front": {"type": "object", "description": "Front damage findings + photo evidence."},
+    "rear": {"type": "object"},
+    "left_side": {"type": "object"},
+    "right_side": {"type": "object"},
+    "tyres": {"type": "object", "description": "Tyre tread/sidewall findings."},
+    "interior": {"type": "object"},
+    "engine_bay": {"type": "object"},
+    "valuation": {"type": "object", "description": "Approved valuation adjustment."},
+    "final_report": {"type": "object", "description": "Submitted report record."}
+  },
+  "required": ["summary", "completed", "front", "rear", "tyres", "final_report"]
+}

@@ -1,0 +1,96 @@
+{
+  "set_id": "hindi_level_1",
+  "description": "Hindi Devanagari level 1 prompts.",
+  "prompts": [
+    {
+      "prompt_id": "hindi_l1_001",
+      "text": "मेरा बैग लाल है।",
+      "display_text": "मेरा बैग लाल है।",
+      "audio_prompt_text": "मेरा बैग लाल है।",
+      "language_mode": "hindi",
+      "script": "devanagari",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["मेरा", "बैग", "लाल"],
+      "target_phonemes": ["/aa/"],
+      "allowed_variants": {
+        "लाल": ["red", "laal"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hindi_l1_002",
+      "text": "मैंने कहानी पढ़ी।",
+      "display_text": "मैंने कहानी पढ़ी।",
+      "audio_prompt_text": "मैंने कहानी पढ़ी।",
+      "language_mode": "hindi",
+      "script": "devanagari",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["मैंने", "कहानी", "पढ़ी"],
+      "target_phonemes": ["/dh/"],
+      "allowed_variants": {
+        "कहानी": ["story", "kahani"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hindi_l1_003",
+      "text": "चाँद आसमान में है।",
+      "display_text": "चाँद आसमान में है।",
+      "audio_prompt_text": "चाँद आसमान में है।",
+      "language_mode": "hindi",
+      "script": "devanagari",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["चाँद", "आसमान"],
+      "target_phonemes": ["/ch/", "/aa/"],
+      "allowed_variants": {
+        "चाँद": ["moon", "chaand"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hindi_l1_004",
+      "text": "रोबोट धीरे चला।",
+      "display_text": "रोबोट धीरे चला।",
+      "audio_prompt_text": "रोबोट धीरे चला।",
+      "language_mode": "hindi",
+      "script": "devanagari",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["रोबोट", "धीरे", "चला"],
+      "target_phonemes": ["/r/", "/dh/"],
+      "allowed_variants": {
+        "रोबोट": ["robot"]
+      },
+      "scoring_profile": "sentence_reading"
+    },
+    {
+      "prompt_id": "hindi_l1_005",
+      "text": "मुझे स्कूल जाना है।",
+      "display_text": "मुझे स्कूल जाना है।",
+      "audio_prompt_text": "मुझे स्कूल जाना है।",
+      "language_mode": "hindi",
+      "script": "devanagari",
+      "age_band": "6-8",
+      "difficulty": "level_1",
+      "assessment_mode": "sentence_reading",
+      "prompt_type": "sentence",
+      "target_words": ["मुझे", "स्कूल", "जाना"],
+      "target_phonemes": ["/sk/"],
+      "allowed_variants": {
+        "स्कूल": ["school", "iskool"]
+      },
+      "scoring_profile": "sentence_reading"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "capture_the_whole_plant_in_frame": {
+    "summary": "Healthy-looking potted pothos; some lower-leaf yellowing.",
+    "confidence": 0.78,
+    "content": {
+      "species": "Epipremnum aureum",
+      "common_name": "Pothos",
+      "health": "fair",
+      "symptoms": ["lower-leaf yellowing"],
+      "severity": "mild"
+    },
+    "evidence_refs": ["whole_plant_photo"]
+  },
+  "capture_a_close_up_of_the_affected_leaves_or_ste": {
+    "summary": "Close-up shows yellowing with green veins on older leaves.",
+    "confidence": 0.72,
+    "content": {
+      "symptoms": ["interveinal yellowing", "soft stems"],
+      "severity": "mild"
+    },
+    "evidence_refs": ["closeup_photo"]
+  }
+}

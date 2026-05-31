@@ -1,0 +1,49 @@
+{
+  "description": "Mock audio fixtures; URIs are symbolic so the demo runs without audio files.",
+  "recordings": [
+    {
+      "recording_id": "mock_red_ball_skip_article",
+      "prompt_id": "indian_english_l1_001",
+      "raw_audio_uri": "mock://audio/red_ball_skip_article",
+      "duration_ms": 3400,
+      "sample_rate": 16000,
+      "volume_score": 0.84,
+      "noise_score": 0.82,
+      "vad_speech_detected": true,
+      "expected_mock_transcript": "the red ball is under table"
+    },
+    {
+      "recording_id": "mock_iskool_variant",
+      "prompt_id": "hinglish_l1_001",
+      "raw_audio_uri": "mock://audio/iskool_variant",
+      "duration_ms": 2600,
+      "sample_rate": 16000,
+      "volume_score": 0.86,
+      "noise_score": 0.80,
+      "vad_speech_detected": true,
+      "expected_mock_transcript": "mera iskool bag ready hai"
+    },
+    {
+      "recording_id": "mock_code_switch_skips",
+      "prompt_id": "hinglish_l1_002",
+      "raw_audio_uri": "mock://audio/code_switch_skips",
+      "duration_ms": 4300,
+      "sample_rate": 16000,
+      "volume_score": 0.79,
+      "noise_score": 0.76,
+      "vad_speech_detected": true,
+      "expected_mock_transcript": "I went school phir lunch khaya"
+    },
+    {
+      "recording_id": "mock_low_volume_no_speech",
+      "prompt_id": "indian_english_l1_001",
+      "raw_audio_uri": "mock://audio/low_volume",
+      "duration_ms": 1200,
+      "sample_rate": 16000,
+      "volume_score": 0.18,
+      "noise_score": 0.62,
+      "vad_speech_detected": false,
+      "expected_mock_transcript": ""
+    }
+  ]
+}

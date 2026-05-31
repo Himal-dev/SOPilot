@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "support_resolution",
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "Human-readable resolution summary."
+    },
+    "completed": {
+      "type": "boolean",
+      "description": "Whether the runbook completed."
+    },
+    "order": {
+      "type": "object",
+      "description": "Order looked up from the CRM."
+    },
+    "payment": {
+      "type": "object",
+      "description": "Latest payment status."
+    },
+    "incident": {
+      "type": "object",
+      "description": "Service-status / incident check result."
+    },
+    "kb": {
+      "type": "object",
+      "description": "Matching knowledge-base article."
+    },
+    "response": {
+      "type": "object",
+      "description": "The resolution response approved for the customer."
+    },
+    "ticket": {
+      "type": "object",
+      "description": "Ticket update / closure result."
+    }
+  },
+  "required": ["summary", "completed", "response", "ticket"]
+}

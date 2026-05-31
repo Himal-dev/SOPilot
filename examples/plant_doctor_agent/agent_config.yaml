@@ -1,0 +1,33 @@
+name: plant_doctor_agent
+description: >
+  Live single-plant "Plant Doctor". Captures a guided photo shot-list (vision),
+  asks the gardener about care habits (voice), diagnoses the likely cause, and
+  pauses before submitting an evidence-backed care report.
+sop: sop.md
+sop_version: v1
+output_schema: output_schema.json
+
+adapters:
+  vision:
+    enabled: true
+    provider: openai
+    cues: sample_inputs/vision_cues.json
+  voice:
+    enabled: true
+    provider: elevenlabs
+    cues: sample_inputs/voice_cues.json
+
+mcp_servers: []
+
+hitl:
+  auto_approve: true
+  reject_triggers: []
+  reject_above_risk: null
+  reviewer: auto
+
+model:
+  compiler:
+    use_llm: false
+    api_key_env: OPENAI_API_KEY
+  max_steps: 50
+  budget_usd: 0.0

@@ -1,0 +1,17 @@
+{
+  "description": "Prompt authors opt in to these variants per prompt metadata; they are not global equivalence rules.",
+  "variants": {
+    "school": ["iskool"],
+    "friend": ["dost"],
+    "house": ["ghar"],
+    "water": ["paani"],
+    "lunch": ["tiffin", "lunchbox"],
+    "went": ["gaya", "gayi"],
+    "under": ["neeche", "ke under"],
+    "red": ["laal"],
+    "ball": ["ball"],
+    "story": ["kahani"],
+    "robot": ["robot"],
+    "moon": ["chaand"]
+  }
+}

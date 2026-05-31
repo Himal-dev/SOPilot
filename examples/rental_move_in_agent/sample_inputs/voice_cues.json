@@ -1,0 +1,20 @@
+{
+  "ask_the_tenant_about_any_pre_existing_damage_in_": {
+    "summary": "Tenant says the living room scuff was already there at handover.",
+    "confidence": 0.8,
+    "content": {"tenant_confirms_preexisting": true, "area": "living_room"},
+    "evidence_refs": ["transcript_living_room"]
+  },
+  "ask_the_tenant_to_confirm_the_appliances_are_in_": {
+    "summary": "Tenant confirms fridge and hob work; chimney light is flickering.",
+    "confidence": 0.78,
+    "content": {"fridge": "ok", "hob": "ok", "chimney": "light_flickering"},
+    "evidence_refs": ["transcript_kitchen"]
+  },
+  "ask_the_tenant_to_verbally_verify_the_meter_read": {
+    "summary": "Tenant verbally verifies both meter readings match the photos.",
+    "confidence": 0.83,
+    "content": {"electricity_verified": true, "water_verified": true},
+    "evidence_refs": ["transcript_meters"]
+  }
+}

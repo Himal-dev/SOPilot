@@ -1,0 +1,26 @@
+{
+  "photograph_the_living_room_walls_floor_and_ceili": {
+    "summary": "Living room: walls clean, minor scuff near the north corner, laminate floor intact.",
+    "confidence": 0.88,
+    "content": {"walls": "minor_scuff", "floor": "intact", "ceiling": "ok"},
+    "evidence_refs": ["living_room_photo_01", "living_room_photo_02"]
+  },
+  "photograph_the_kitchen_appliances_and_countertop": {
+    "summary": "Kitchen: countertop has a small chip; fridge, hob, and chimney present.",
+    "confidence": 0.82,
+    "content": {"countertop": "small_chip", "appliances_present": true},
+    "evidence_refs": ["kitchen_photo_01"]
+  },
+  "photograph_the_bathroom_fixtures_and_check_for_v": {
+    "summary": "Bathroom: fixtures intact, no visible leaks, mild grout staining.",
+    "confidence": 0.9,
+    "content": {"leaks": false, "grout": "mild_staining"},
+    "evidence_refs": ["bathroom_photo_01"]
+  },
+  "read_and_photograph_the_electricity_and_water_me": {
+    "summary": "Meters captured: electricity 48213 kWh, water 01129 kL.",
+    "confidence": 0.86,
+    "content": {"electricity_kwh": 48213, "water_kl": 1129},
+    "evidence_refs": ["meter_photo_electricity", "meter_photo_water"]
+  }
+}

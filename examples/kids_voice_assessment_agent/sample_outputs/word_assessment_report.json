@@ -1,0 +1,78 @@
+{
+  "summary": "BoloBuddy mock run for indian_english_l1_001 completed with one skipped article and good audio quality.",
+  "completed": true,
+  "feedback": {
+    "child_feedback": "Great effort! Ek chhota word miss hua - chalo fir se bolte hain.",
+    "adult_feedback": "The child completed 6/7 expected words. Skipped word(s): the. Fluency was confident with confidence 0.80. This is an educational assessment, not a clinical diagnosis.",
+    "suggested_practice": [
+      "Read once with finger tracking so small words are not skipped."
+    ],
+    "should_suppress_child_feedback": false
+  },
+  "child_result": {
+    "mode": "child",
+    "feedback": "Great effort! Ek chhota word miss hua - chalo fir se bolte hain.",
+    "developmental_level": "confident",
+    "show_raw_scores": false
+  },
+  "adult_report": {
+    "mode": "adult",
+    "expected_text": "The red ball is under the table.",
+    "spoken_transcript": "the red ball is under table",
+    "missed_words": ["the"],
+    "changed_words": [],
+    "scores": {
+      "word_accuracy": 0.857,
+      "reference_completeness": 0.857,
+      "phoneme_accuracy": 0.74,
+      "fluency_score": 0.92,
+      "audio_quality_score": 0.83,
+      "overall_score": 0.83,
+      "developmental_level": "confident"
+    },
+    "uncertainty": [
+      "Fallback G2P estimates expected sounds; it is not clinical phoneme recognition."
+    ],
+    "evidence": [
+      {
+        "id": "kids_ev_0001",
+        "kind": "audio",
+        "summary": "Attached mock recording mock_red_ball_skip_article"
+      },
+      {
+        "id": "kids_ev_0002",
+        "kind": "alignment",
+        "summary": "The article before table appears skipped."
+      }
+    ],
+    "needs_human_review": false
+  },
+  "full_report": {
+    "title": "BoloBuddy Voice Assessment Report",
+    "summary": "Educational observations from a short sentence-reading task.",
+    "battery_id": "bolo_age_7_8_code_switch_story",
+    "domains": {
+      "speech_clarity": {"level": "comfortable", "score": 0.79},
+      "expressive_language": {"level": "comfortable", "score": 0.86},
+      "working_memory": {"level": "developing", "score": 0.86}
+    },
+    "insights": [
+      {
+        "domain": "expressive_language",
+        "label": "Small word completion",
+        "summary": "The article before table appears skipped; practice with slow finger-tracking.",
+        "confidence": 0.88,
+        "severity": "practice"
+      }
+    ],
+    "exercises": [
+      {
+        "skill": "Small word completion",
+        "activity": "Listen to a sentence and repeat it with all small words.",
+        "mode": "home_practice",
+        "priority": "medium"
+      }
+    ],
+    "disclaimer": "This is an educational report, not an IQ test or clinical diagnosis."
+  }
+}

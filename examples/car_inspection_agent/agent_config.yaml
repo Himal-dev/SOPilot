@@ -1,0 +1,29 @@
+name: car_inspection_agent
+description: >
+  The Cars24 Jockey inspection as config: vision-centric capture of each angle,
+  damage extraction with confidence, an evidence-quality validation rule, and two
+  human-review checkpoints (valuation change, final submit).
+sop: sop.md
+sop_version: v1
+output_schema: output_schema.json
+
+adapters:
+  vision:
+    enabled: true
+    cues: sample_inputs/vision_cues.json
+  # No voice adapter: this inspection is camera-driven.
+
+mcp_servers: []
+
+hitl:
+  auto_approve: true
+  reject_triggers: []          # try ["valuation_change"] to demo a halt
+  reject_above_risk: null
+  reviewer: auto
+
+model:
+  compiler:
+    use_llm: false
+    api_key_env: OPENAI_API_KEY
+  max_steps: 50
+  budget_usd: 0.0
