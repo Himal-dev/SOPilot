@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import secrets
 from collections.abc import Sequence
 from typing import Callable
 
@@ -62,14 +63,20 @@ def install_api_security(
             app_token
             and is_protected(request.url.path)
             and request.url.path not in exempt
-            and request.headers.get("x-app-token") != app_token
+            and not _matches_secret(request.headers.get("x-app-token", ""), app_token)
         ):
             return JSONResponse({"ok": False, "reason": "Invalid app token."}, status_code=401)
         if (
             access_code
             and is_protected(request.url.path)
             and request.url.path not in access_code_exempt
-            and request.headers.get("x-trial-code") != access_code
+            and not _matches_secret(request.headers.get("x-trial-code", ""), access_code)
         ):
             return JSONResponse({"ok": False, "reason": "Invalid access code."}, status_code=401)
         return await call_next(request)
+
+
+def _matches_secret(candidate: str, expected: str) -> bool:
+    if not candidate or not expected:
+        return False
+    return secrets.compare_digest(candidate, expected)

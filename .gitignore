@@ -2,8 +2,17 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
 *.egg-info/
+build/
+dist/
+node_modules/
 *.sqlite
+*.log
+.DS_Store
 
 .env
 .env.*

@@ -54,6 +54,9 @@ from fastapi.testclient import TestClient  # noqa: E402
 def _clear_hosted_auth_env(monkeypatch):
     monkeypatch.delenv("PLANT_DOCTOR_APP_TOKEN", raising=False)
     monkeypatch.delenv("PLANT_DOCTOR_TRIAL_CODE", raising=False)
+    monkeypatch.delenv("PLANT_DOCTOR_MAX_UPLOAD_BYTES", raising=False)
+    monkeypatch.delenv("SOPILOT_ENV", raising=False)
+    monkeypatch.delenv("SOPILOT_ENABLE_API_DOCS", raising=False)
 
 
 def _client():
@@ -162,6 +165,28 @@ def test_elevenlabs_private_agent_session_uses_server_token(monkeypatch):
     assert body["auth"] == "private_webrtc"
 
 
+def test_elevenlabs_private_agent_token_error_is_generic(monkeypatch):
+    import app.server as server
+
+    monkeypatch.setenv("ELEVENLABS_PLANT_DOCTOR_AGENT_ID", "agent_private")
+    monkeypatch.delenv("ELEVENLABS_AGENT_PUBLIC", raising=False)
+    monkeypatch.setenv("ELEVENLABS_API_KEY", "secret-key")
+
+    def fail_token(agent_id, api_key):
+        raise RuntimeError("provider leaked internal detail")
+
+    monkeypatch.setattr(server, "_get_elevenlabs_conversation_token", fail_token)
+    resp = _client().get("/api/elevenlabs/session")
+    assert resp.status_code == 502
+    body = resp.json()
+    assert body["enabled"] is False
+    assert body["reason"] == (
+        "Could not create ElevenLabs conversation token. "
+        "Please check the server voice configuration."
+    )
+    assert "provider leaked" not in json.dumps(body)
+
+
 def test_elevenlabs_setup_payload_contains_agent_contract():
     resp = _client().get("/api/elevenlabs/setup")
     assert resp.status_code == 200
@@ -217,6 +242,27 @@ def test_live_run_without_openai_key_reports_failure(monkeypatch):
     assert "OPENAI_API_KEY" in body["final_output"]["care_report"]["failures"][0]["reason"]
 
 
+def test_run_rejects_unsupported_media_type():
+    client = _client()
+    files = [
+        ("whole_plant_photo", ("whole.txt", io.BytesIO(b"not an image"), "text/plain")),
+    ]
+    resp = client.post("/api/run", data={"allow_demo_data": "true"}, files=files)
+    assert resp.status_code == 415
+    assert resp.json()["detail"] == "Unsupported media type for whole_plant_photo."
+
+
+def test_run_rejects_oversized_media(monkeypatch):
+    monkeypatch.setenv("PLANT_DOCTOR_MAX_UPLOAD_BYTES", "4")
+    client = _client()
+    files = [
+        ("whole_plant_photo", ("whole.jpg", io.BytesIO(b"12345"), "image/jpeg")),
+    ]
+    resp = client.post("/api/run", data={"allow_demo_data": "true"}, files=files)
+    assert resp.status_code == 413
+    assert resp.json()["detail"] == "Uploaded media is too large."
+
+
 def test_run_then_decision_completes_with_explicit_demo_data():
     client = _client()
     files = [
@@ -252,6 +298,20 @@ def test_run_then_decision_completes_with_explicit_demo_data():
     assert "Submit the plant care report" not in json.dumps(latest)
 
 
+def test_decision_rejects_untrusted_db_path():
+    client = _client()
+    resp = client.post(
+        "/api/decision",
+        json={
+            "thread_id": "thread-123",
+            "db_path": "/tmp/not_a_plant_doctor.sqlite",
+            "decision": "approve",
+        },
+    )
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Invalid run handle."
+
+
 def test_run_auto_approves_for_hosted_trial(monkeypatch):
     monkeypatch.setenv("PLANT_DOCTOR_AUTO_APPROVE", "true")
     client = _client()
@@ -271,6 +331,14 @@ def test_run_auto_approves_for_hosted_trial(monkeypatch):
     body = run.json()
     assert body["status"] == "completed"
     assert body["final_output"]["completed"] is True
+
+
+def test_api_docs_disabled_in_production(monkeypatch):
+    monkeypatch.setenv("SOPILOT_ENV", "production")
+    monkeypatch.delenv("SOPILOT_ENABLE_API_DOCS", raising=False)
+    client = _client()
+    assert client.get("/docs").status_code == 404
+    assert client.get("/openapi.json").status_code == 404
 
 
 def test_server_media_map_matches_compiled_step_ids():

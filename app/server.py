@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import os
+import secrets
 import tempfile
 import urllib.parse
 import urllib.request
@@ -19,7 +20,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, File, Form, Request, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 
@@ -40,6 +41,22 @@ from sopilot.web_runtime import install_api_security
 REPO = Path(__file__).resolve().parents[1]
 AGENT = REPO / "examples" / "plant_doctor_agent"
 WEB = Path(__file__).resolve().parent / "web"
+DEFAULT_MAX_UPLOAD_BYTES = 8 * 1024 * 1024
+IMAGE_UPLOAD_MIME_TYPES = {
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+}
+AUDIO_UPLOAD_MIME_TYPES = {
+    "audio/webm",
+    "audio/wav",
+    "audio/x-wav",
+    "audio/mpeg",
+    "audio/mp4",
+    "audio/ogg",
+}
 
 _PLANT_RECORD_TOPICS = [
     RecordTopic(key="watering", label="watering routine"),
@@ -66,7 +83,13 @@ _PLANT_CAPTURE_TOOL_OVERRIDES = {
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="SOPilot Plant Doctor")
+    docs_enabled = _api_docs_enabled()
+    app = FastAPI(
+        title="SOPilot Plant Doctor",
+        docs_url="/docs" if docs_enabled else None,
+        redoc_url="/redoc" if docs_enabled else None,
+        openapi_url="/openapi.json" if docs_enabled else None,
+    )
     install_api_security(
         app,
         token_env="PLANT_DOCTOR_APP_TOKEN",
@@ -85,8 +108,9 @@ def create_app() -> FastAPI:
     @app.get("/api/auth/check")
     def auth_check(request: Request) -> JSONResponse:
         required = bool(os.environ.get("PLANT_DOCTOR_TRIAL_CODE", ""))
-        ok = (not required) or request.headers.get("x-trial-code") == os.environ.get(
-            "PLANT_DOCTOR_TRIAL_CODE"
+        ok = (not required) or _constant_time_equal(
+            request.headers.get("x-trial-code", ""),
+            os.environ.get("PLANT_DOCTOR_TRIAL_CODE", ""),
         )
         log_session_event(
             "auth_check",
@@ -138,11 +162,19 @@ def create_app() -> FastAPI:
         try:
             token = _get_elevenlabs_conversation_token(agent_id, api_key)
         except Exception as exc:
-            _log_guide_session(session_id, enabled=False, reason="token_error")
+            _log_guide_session(
+                session_id,
+                enabled=False,
+                reason="token_error",
+                error_type=type(exc).__name__,
+            )
             return JSONResponse(
                 {
                     "enabled": False,
-                    "reason": f"Could not create ElevenLabs conversation token: {exc}",
+                    "reason": (
+                        "Could not create ElevenLabs conversation token. "
+                        "Please check the server voice configuration."
+                    ),
                     "required_client_tools": _elevenlabs_client_tools(),
                 },
                 status_code=502,
@@ -197,19 +229,21 @@ def create_app() -> FastAPI:
             "closeup_photo": closeup_photo,
         }.items():
             if upload is not None:
-                assets[field] = MediaAsset.from_bytes(
+                assets[field] = await _asset_from_upload(
                     field,
-                    await upload.read(),
-                    mime=upload.content_type or "image/jpeg",
-                    filename=upload.filename or f"{field}.jpg",
+                    upload,
+                    allowed_mime_types=IMAGE_UPLOAD_MIME_TYPES,
+                    default_mime="image/jpeg",
+                    default_filename=f"{field}.jpg",
                 )
 
         if care_habits_audio is not None:
-            assets["care_habits_audio"] = MediaAsset.from_bytes(
+            assets["care_habits_audio"] = await _asset_from_upload(
                 "care_habits_audio",
-                await care_habits_audio.read(),
-                mime=care_habits_audio.content_type or "audio/webm",
-                filename=care_habits_audio.filename or "answer.webm",
+                care_habits_audio,
+                allowed_mime_types=AUDIO_UPLOAD_MIME_TYPES,
+                default_mime="audio/webm",
+                default_filename="answer.webm",
             )
         elif care_habits_transcript.strip():
             assets["care_habits_audio"] = MediaAsset.from_transcript(
@@ -258,17 +292,21 @@ def create_app() -> FastAPI:
 
     @app.post("/api/decision")
     async def decision(request: Request, payload: Dict[str, Any]) -> JSONResponse:
+        thread_id = payload.get("thread_id")
+        if not isinstance(thread_id, str) or not thread_id:
+            raise HTTPException(status_code=400, detail="Missing run handle.")
+        db_path = _validated_run_db_path(payload.get("db_path"))
         allow_demo_data = bool(payload.get("allow_demo_data", False))
         final = resume_run(
             AGENT,
-            thread_id=payload["thread_id"],
+            thread_id=thread_id,
             decision={
                 "decision": payload.get("decision", "approve"),
                 "edits": payload.get("edits", {}),
                 "note": payload.get("note", ""),
                 "reviewer": payload.get("reviewer", "ui"),
             },
-            db_path=payload["db_path"],
+            db_path=db_path,
         )
         final["final_output"] = build_plant_care_report(
             final, allow_demo_data=allow_demo_data, manifest=_plant_manifest()
@@ -315,9 +353,6 @@ def create_app() -> FastAPI:
     if WEB.exists():
         app.mount("/", StaticFiles(directory=str(WEB), html=True), name="web")
     return app
-
-
-app = create_app()
 
 
 @lru_cache(maxsize=1)
@@ -443,6 +478,80 @@ def _configuration_failure(reason: str, next_step: str) -> Dict[str, Any]:
     }
 
 
+async def _asset_from_upload(
+    field: str,
+    upload: UploadFile,
+    *,
+    allowed_mime_types: set[str],
+    default_mime: str,
+    default_filename: str,
+) -> MediaAsset:
+    mime = _normalized_mime(upload.content_type or default_mime)
+    if mime not in allowed_mime_types:
+        raise HTTPException(
+            status_code=415,
+            detail=f"Unsupported media type for {field}.",
+        )
+    data = await _read_upload_limited(upload, _max_upload_bytes())
+    if not data:
+        raise HTTPException(status_code=400, detail=f"{field} is empty.")
+    return MediaAsset.from_bytes(
+        field,
+        data,
+        mime=mime,
+        filename=upload.filename or default_filename,
+    )
+
+
+async def _read_upload_limited(upload: UploadFile, max_bytes: int) -> bytes:
+    data = await upload.read(max_bytes + 1)
+    if len(data) > max_bytes:
+        raise HTTPException(status_code=413, detail="Uploaded media is too large.")
+    return data
+
+
+def _max_upload_bytes() -> int:
+    raw = os.environ.get("PLANT_DOCTOR_MAX_UPLOAD_BYTES", "")
+    if not raw:
+        return DEFAULT_MAX_UPLOAD_BYTES
+    try:
+        return max(1, int(raw))
+    except ValueError:
+        return DEFAULT_MAX_UPLOAD_BYTES
+
+
+def _normalized_mime(raw: str) -> str:
+    return raw.split(";", 1)[0].strip().lower()
+
+
+def _validated_run_db_path(raw: Any) -> str:
+    if not isinstance(raw, str) or not raw.strip():
+        raise HTTPException(status_code=400, detail="Missing run handle.")
+    temp_root = Path(tempfile.gettempdir()).resolve()
+    path = Path(raw).resolve(strict=False)
+    if (
+        path.parent != temp_root
+        or path.suffix != ".sqlite"
+        or not path.name.startswith("plant_doctor_run_")
+    ):
+        raise HTTPException(status_code=400, detail="Invalid run handle.")
+    return str(path)
+
+
+def _api_docs_enabled() -> bool:
+    default = os.environ.get("SOPILOT_ENV", "").strip().lower() not in {
+        "prod",
+        "production",
+    }
+    return _env_bool("SOPILOT_ENABLE_API_DOCS", default)
+
+
+def _constant_time_equal(left: str, right: str) -> bool:
+    if not left or not right:
+        return False
+    return secrets.compare_digest(left, right)
+
+
 def _web_config_js() -> str:
     return "\n".join(
         [
@@ -499,3 +608,6 @@ def _env_bool(name: str, default: bool) -> bool:
     if raw is None:
         return default
     return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+app = create_app()
