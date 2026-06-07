@@ -28,7 +28,7 @@ SOPilot is the architectural consequence of taking those three observations seri
 
 ## System Architecture
 
-![SOPilot System Architecture](docs/images/SOPilot.drawio.png)
+![SOPilot System Architecture](docs/images/SOPilot.drawio (1).png)
 
 *SOPilot compiles standard operating procedures (checklists, policies, markdown) into stateful runtime executions with first-class voice, vision, and human-in-the-loop validation, all backed by an append-only evidence ledger.*
 
