@@ -1,0 +1,280 @@
+<mxfile host="app.diagrams.net" modified="2026-06-07T03:40:00.000Z" agent="SOPilot" version="24.0.0" type="device">
+  <diagram id="sopilot-arch" name="SOPilot Architecture">
+    <mxGraphModel dx="1500" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="1100" background="#fafbfe" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- TITLE                                      -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="title" value="SOPilot  ·  System Architecture" style="text;html=1;align=center;verticalAlign=middle;fontColor=#1e293b;fontSize=24;fontStyle=1;fontFamily=Inter;letterSpacing=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="400" y="18" width="500" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="A procedure compiler for voice- and vision-native AI agents" style="text;html=1;align=center;verticalAlign=middle;fontColor=#94a3b8;fontSize=12;fontStyle=2;fontFamily=Inter;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="400" y="50" width="500" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 1: COMPILE TIME                    -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="sec_compile" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f0ff;strokeColor=#d8b4fe;strokeWidth=1.5;arcSize=6;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="1220" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_compile_label" value="COMPILE TIME" style="text;html=1;align=left;verticalAlign=middle;fontColor=#7c3aed;fontSize=11;fontStyle=1;fontFamily=Inter;letterSpacing=2;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="55" y="87" width="150" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- Inputs -->
+        <mxCell id="sop_doc" value="&lt;b&gt;sop.md&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#8b8b9e&quot; style=&quot;font-size:10px&quot;&gt;Markdown / Checklist / Policy&lt;/font&gt;" style="shape=note2;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#c4b5fd;strokeWidth=1.5;fontColor=#4c1d95;fontSize=12;fontFamily=Inter;size=12;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="out_schema" value="&lt;b&gt;output_schema.json&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#8b8b9e&quot; style=&quot;font-size:10px&quot;&gt;JSON Schema or &quot;suggest&quot;&lt;/font&gt;" style="shape=note2;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#c4b5fd;strokeWidth=1.5;fontColor=#4c1d95;fontSize=12;fontFamily=Inter;size=12;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="310" y="120" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="agent_cfg" value="&lt;b&gt;agent_config.yaml&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#8b8b9e&quot; style=&quot;font-size:10px&quot;&gt;Adapters · MCP · HITL · Model&lt;/font&gt;" style="shape=note2;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#c4b5fd;strokeWidth=1.5;fontColor=#4c1d95;fontSize=12;fontFamily=Inter;size=12;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="120" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Compiler -->
+        <mxCell id="compiler" value="&lt;b&gt;SOP Compiler&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#7c3aed&quot; style=&quot;font-size:10px&quot;&gt;core/sop_compiler&lt;br&gt;Local regex parser  ·  Optional LLM hook&lt;br&gt;[vision] [evidence] [produces] [review] [decision] [validate]&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ddd6fe;strokeColor=#a78bfa;strokeWidth=2;fontColor=#3b0764;fontSize=12;fontFamily=Inter;arcSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="185" y="210" width="380" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Compiled Workflow -->
+        <mxCell id="compiled_wf" value="&lt;b&gt;CompiledWorkflow&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot; color=&quot;#64748b&quot;&gt;steps · required_evidence · decision_points · tools_needed&lt;br&gt;validation_rules · human_review_points · output_schema&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#94a3b8;strokeWidth=2;fontColor=#1e293b;fontSize=12;fontFamily=Inter;arcSize=10;dashed=1;dashPattern=6 3;" vertex="1" parent="1">
+          <mxGeometry x="775" y="150" width="430" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Compile-time edges -->
+        <mxCell id="e1" edge="1" parent="1" source="sop_doc" target="compiler" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=blockThin;endFill=1;" >
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="out_schema" target="compiler" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=blockThin;endFill=1;" >
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="agent_cfg" target="compiler" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=blockThin;endFill=1;" >
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="compile" edge="1" parent="1" source="compiler" target="compiled_wf" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7c3aed;strokeWidth=2;endArrow=blockThin;endFill=1;fontColor=#7c3aed;fontSize=10;fontStyle=1;fontFamily=Inter;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="243" />
+              <mxPoint x="700" y="178" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 2: LANGGRAPH RUNTIME               -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="sec_runtime" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#93c5fd;strokeWidth=1.5;arcSize=6;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="350" width="1220" height="310" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_runtime_label" value="LANGGRAPH STATE RUNTIME" style="text;html=1;align=left;verticalAlign=middle;fontColor=#2563eb;fontSize=11;fontStyle=1;fontFamily=Inter;letterSpacing=2;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="55" y="357" width="280" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_runtime_sub" value="core/state_runtime/graph.py  ·  Only module importing LangGraph primitives" style="text;html=1;align=left;verticalAlign=middle;fontColor=#93c5fd;fontSize=10;fontStyle=0;fontFamily=Inter;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="55" y="374" width="450" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- Central State -->
+        <mxCell id="central_state" value="&lt;b&gt;Central State&lt;/b&gt;  &lt;font color=&quot;#64748b&quot;&gt;(Pydantic Model)&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot; color=&quot;#475569&quot;&gt;goal · current_step · pending_steps · completed_steps · observations&lt;br&gt;evidence · tool_results · risks · human_overrides · step_outputs · status&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#86efac;strokeWidth=2;fontColor=#14532d;fontSize=12;fontFamily=Inter;arcSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="395" width="500" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Checkpointer -->
+        <mxCell id="checkpointer" value="&lt;b&gt;SQLite Checkpointer&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Persists state across&lt;br&gt;interrupt / resume cycles&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#7dd3fc;strokeWidth=1;fontColor=#0c4a6e;fontSize=11;fontFamily=Inter;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Graph Nodes -->
+        <mxCell id="n_plan" value="&lt;b&gt;plan&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot; color=&quot;#475569&quot;&gt;Pick next pending step&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#60a5fa;strokeWidth=2;fontColor=#1e3a5f;fontSize=12;fontFamily=Inter;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="500" width="150" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="n_execute" value="&lt;b&gt;execute&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot; color=&quot;#475569&quot;&gt;Dispatch by modality&lt;br&gt;Record evidence · Validate&lt;br&gt;Apply decision branches&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#60a5fa;strokeWidth=2;fontColor=#1e3a5f;fontSize=12;fontFamily=Inter;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="490" width="190" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="n_review" value="&lt;b&gt;review&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot; color=&quot;#78350f&quot;&gt;HITL interrupt()&lt;br&gt;approve · edit · reject&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#fbbf24;strokeWidth=2;fontColor=#78350f;fontSize=12;fontFamily=Inter;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="740" y="500" width="170" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="n_finalize" value="&lt;b&gt;finalize&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot; color=&quot;#475569&quot;&gt;Fill output schema&lt;br&gt;from state + evidence&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#60a5fa;strokeWidth=2;fontColor=#1e3a5f;fontSize=12;fontFamily=Inter;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="505" width="160" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- START / END markers -->
+        <mxCell id="start_dot" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#1e293b;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="68" y="522" width="18" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="end_dot" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#1e293b;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="525" width="22" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="end_dot_inner" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1e293b;strokeColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1215" y="530" width="12" height="12" as="geometry" />
+        </mxCell>
+
+        <!-- Graph Edges -->
+        <mxCell id="e_start" edge="1" parent="1" source="start_dot" target="n_plan" style="rounded=1;strokeColor=#475569;strokeWidth=1.5;endArrow=blockThin;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_plan_exec" value="next step" edge="1" parent="1" source="n_plan" target="n_execute" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#3b82f6;strokeWidth=2;endArrow=blockThin;endFill=1;fontColor=#3b82f6;fontSize=10;fontFamily=Inter;fontStyle=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_exec_loop" value="loop back" edge="1" parent="1" source="n_execute" target="n_plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#3b82f6;strokeWidth=1.5;endArrow=blockThin;endFill=1;fontColor=#93c5fd;fontSize=9;fontFamily=Inter;exitX=0.3;exitY=0;exitDx=0;exitDy=0;entryX=0.7;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="467" y="475" />
+              <mxPoint x="280" y="475" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_exec_review" value="review gate" edge="1" parent="1" source="n_execute" target="n_review" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#f59e0b;strokeWidth=2;endArrow=blockThin;endFill=1;fontColor=#d97706;fontSize=10;fontFamily=Inter;fontStyle=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_review_approve" value="approved → resume" edge="1" parent="1" source="n_review" target="n_plan" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#22c55e;strokeWidth=1.5;endArrow=blockThin;endFill=1;fontColor=#16a34a;fontSize=9;fontFamily=Inter;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="825" y="610" />
+              <mxPoint x="175" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_review_reject" value="rejected" edge="1" parent="1" source="n_review" target="n_finalize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#ef4444;strokeWidth=1.5;endArrow=blockThin;endFill=1;fontColor=#ef4444;fontSize=9;fontFamily=Inter;dashed=1;dashPattern=6 3;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_plan_fin" value="all steps done" edge="1" parent="1" source="n_plan" target="n_finalize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;fontColor=#94a3b8;fontSize=9;fontFamily=Inter;dashed=1;dashPattern=6 3;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=1;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="630" />
+              <mxPoint x="1030" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_fin_end" edge="1" parent="1" source="n_finalize" target="end_dot" style="rounded=1;strokeColor=#475569;strokeWidth=1.5;endArrow=blockThin;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- State ↔ Nodes -->
+        <mxCell id="e_s1" edge="1" parent="1" source="central_state" target="n_plan" style="rounded=1;strokeColor=#86efac;strokeWidth=1;endArrow=classic;startArrow=classic;endFill=1;startFill=1;dashed=1;dashPattern=4 2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2" value="read / write" edge="1" parent="1" source="central_state" target="n_execute" style="rounded=1;strokeColor=#86efac;strokeWidth=1;endArrow=classic;startArrow=classic;endFill=1;startFill=1;dashed=1;dashPattern=4 2;fontColor=#22c55e;fontSize=9;fontFamily=Inter;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s3" edge="1" parent="1" source="central_state" target="n_review" style="rounded=1;strokeColor=#86efac;strokeWidth=1;endArrow=classic;startArrow=classic;endFill=1;startFill=1;dashed=1;dashPattern=4 2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s4" edge="1" parent="1" source="central_state" target="n_finalize" style="rounded=1;strokeColor=#86efac;strokeWidth=1;endArrow=classic;startArrow=classic;endFill=1;startFill=1;dashed=1;dashPattern=4 2;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Compiled workflow → plan (loads) -->
+        <mxCell id="e_wf_rt" value="loads workflow" edge="1" parent="1" source="compiled_wf" target="central_state" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=blockThin;endFill=1;dashed=1;dashPattern=6 3;fontColor=#94a3b8;fontSize=9;fontFamily=Inter;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="300" />
+              <mxPoint x="600" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 3: ADAPTERS & SEAMS                -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="sec_adapt" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef9ee;strokeColor=#fcd34d;strokeWidth=1.5;arcSize=6;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="680" width="1220" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_adapt_label" value="FRAMEWORK-AGNOSTIC SEAMS" style="text;html=1;align=left;verticalAlign=middle;fontColor=#b45309;fontSize=11;fontStyle=1;fontFamily=Inter;letterSpacing=2;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="55" y="687" width="290" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_adapt_sub" value="Adapter contract:  observe()  ·  act()  ·  capabilities()       |       MCPConnector contract       |       EvidenceRecord       |       ReviewRequest / ReviewDecision" style="text;html=1;align=left;verticalAlign=middle;fontColor=#d97706;fontSize=9;fontStyle=0;fontFamily=Inter;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="55" y="704" width="800" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- Adapter boxes -->
+        <mxCell id="a_vision" value="&lt;b&gt;👁 Vision Adapter&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;OpenAI VLM · Stub Provider&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#fbbf24;strokeWidth=1.5;fontColor=#78350f;fontSize=11;fontFamily=Inter;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="60" y="725" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_voice" value="&lt;b&gt;🎙 Voice Adapter&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;ElevenLabs ConvAI · Stub&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#fbbf24;strokeWidth=1.5;fontColor=#78350f;fontSize=11;fontFamily=Inter;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="725" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_tools" value="&lt;b&gt;🔧 Tool Router&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;MCP discovery · select · call&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#fbbf24;strokeWidth=1.5;fontColor=#78350f;fontSize=11;fontFamily=Inter;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="500" y="725" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ledger" value="&lt;b&gt;📋 Evidence Ledger&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Append-only · claim → evidence&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#c4b5fd;strokeWidth=1.5;fontColor=#4c1d95;fontSize=11;fontFamily=Inter;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="720" y="725" width="210" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="a_hitl" value="&lt;b&gt;🛑 Human Review&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;interrupt() + AutoApprovePolicy&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#fca5a5;strokeWidth=1.5;fontColor=#7f1d1d;fontSize=11;fontFamily=Inter;arcSize=10;" vertex="1" parent="1">
+          <mxGeometry x="950" y="725" width="210" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Edges: execute → adapters -->
+        <mxCell id="ea1" edge="1" parent="1" source="n_execute" target="a_vision" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#fbbf24;strokeWidth=1.5;endArrow=classic;startArrow=classic;endFill=1;startFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea2" edge="1" parent="1" source="n_execute" target="a_voice" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#fbbf24;strokeWidth=1.5;endArrow=classic;startArrow=classic;endFill=1;startFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea3" edge="1" parent="1" source="n_execute" target="a_tools" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#fbbf24;strokeWidth=1.5;endArrow=classic;startArrow=classic;endFill=1;startFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea4" edge="1" parent="1" source="n_execute" target="a_ledger" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#c4b5fd;strokeWidth=1.5;endArrow=blockThin;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ea5" edge="1" parent="1" source="n_review" target="a_hitl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#fca5a5;strokeWidth=1.5;endArrow=classic;startArrow=classic;endFill=1;startFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SECTION 4: OUTPUT                          -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="sec_output" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#6ee7b7;strokeWidth=1.5;arcSize=6;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="830" width="1220" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="sec_output_label" value="OUTPUT" style="text;html=1;align=left;verticalAlign=middle;fontColor=#059669;fontSize=11;fontStyle=1;fontFamily=Inter;letterSpacing=2;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="55" y="837" width="100" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="output_gen" value="&lt;b&gt;Output Generator&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot; color=&quot;#475569&quot;&gt;core/output_generator&lt;br&gt;Fills / suggests output schema from state + evidence&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1fae5;strokeColor=#6ee7b7;strokeWidth=2;fontColor=#064e3b;fontSize=12;fontFamily=Inter;arcSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="860" width="300" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="final_output" value="&lt;b&gt;Structured Output&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;Evidence-grounded JSON report  ·  Audit trail&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bbf7d0;strokeColor=#4ade80;strokeWidth=2.5;fontColor=#052e16;fontSize=13;fontFamily=Inter;arcSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="862" width="280" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Output edges -->
+        <mxCell id="eo1" value="state data" edge="1" parent="1" source="n_finalize" target="output_gen" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#22c55e;strokeWidth=1.5;endArrow=blockThin;endFill=1;fontColor=#16a34a;fontSize=9;fontFamily=Inter;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="820" />
+              <mxPoint x="460" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eo2" value="evidence refs" edge="1" parent="1" source="a_ledger" target="output_gen" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=blockThin;endFill=1;dashed=1;dashPattern=6 3;fontColor=#7c3aed;fontSize=9;fontFamily=Inter;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eo3" edge="1" parent="1" source="output_gen" target="final_output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#22c55e;strokeWidth=2;endArrow=blockThin;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- SIDEBAR: Reference Agents + Principles     -->
+        <!-- ══════════════════════════════════════════ -->
+        <mxCell id="sidebar_agents" value="&lt;div style=&quot;text-align:left;padding:4px&quot;&gt;&lt;b style=&quot;font-size:12px&quot;&gt;Reference Agents&lt;/b&gt;&lt;br&gt;&lt;hr style=&quot;border-color:#e2e8f0;margin:4px 0&quot;&gt;&lt;font style=&quot;font-size:10px&quot;&gt;🌱 &lt;b&gt;plant_doctor&lt;/b&gt; — Voice + Vision + HITL&lt;br&gt;🚗 &lt;b&gt;car_inspection&lt;/b&gt; — Vision + HITL&lt;br&gt;👶 &lt;b&gt;kids_voice_assessment&lt;/b&gt; — Voice&lt;br&gt;🎧 &lt;b&gt;support_runbook&lt;/b&gt; — Text + Tools&lt;br&gt;🏠 &lt;b&gt;rental_move_in&lt;/b&gt; — Vision + Forms&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=1.5;fontColor=#334155;fontSize=11;fontFamily=Inter;arcSize=6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="80" width="210" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="sidebar_principles" value="&lt;div style=&quot;text-align:left;padding:4px&quot;&gt;&lt;b style=&quot;font-size:12px&quot;&gt;Design Principles&lt;/b&gt;&lt;br&gt;&lt;hr style=&quot;border-color:#e2e8f0;margin:4px 0&quot;&gt;&lt;font style=&quot;font-size:10px&quot;&gt;◆ &lt;b&gt;Procedure first&lt;/b&gt; — SOP is the spec&lt;br&gt;◆ &lt;b&gt;Typed state&lt;/b&gt; — Single Pydantic source of truth&lt;br&gt;◆ &lt;b&gt;Evidence by default&lt;/b&gt; — No unsupported claims&lt;br&gt;◆ &lt;b&gt;HITL where it matters&lt;/b&gt; — LangGraph interrupt&lt;br&gt;◆ &lt;b&gt;Framework-agnostic&lt;/b&gt; — Seams, not coupling&lt;br&gt;◆ &lt;b&gt;Fail closed&lt;/b&gt; — Missing evidence halts the run&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=1.5;fontColor=#334155;fontSize=11;fontFamily=Inter;arcSize=6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="280" width="210" height="195" as="geometry" />
+        </mxCell>
+
+        <!-- Agent directory annotation -->
+        <mxCell id="sidebar_dir" value="&lt;div style=&quot;text-align:left;padding:4px&quot;&gt;&lt;b style=&quot;font-size:12px&quot;&gt;Agent = Directory&lt;/b&gt;&lt;br&gt;&lt;hr style=&quot;border-color:#e2e8f0;margin:4px 0&quot;&gt;&lt;font style=&quot;font-size:10px;font-family:monospace&quot;&gt;examples/&amp;lt;name&amp;gt;/&lt;br&gt;├── sop.md&lt;br&gt;├── output_schema.json&lt;br&gt;├── agent_config.yaml&lt;br&gt;└── sample_inputs/&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:10px&quot;&gt;&lt;br&gt;No agent.py to write.&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=1.5;fontColor=#334155;fontSize=11;fontFamily=Inter;arcSize=6;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;spacingRight=8;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="495" width="210" height="195" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

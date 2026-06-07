@@ -26,49 +26,23 @@ SOPilot is the architectural consequence of taking those three observations seri
 
 ---
 
-## What You Get
+## System Architecture
 
-```text
-                  SOP markdown / checklist / policy
-                                |
-                                v
-                       +-----------------+
-                       |  sop_compiler   |
-                       +-----------------+
-                                |
-                                v
-                       CompiledWorkflow (typed, inspectable)
-                                |
-                                v
-        +----------------- planner (LangGraph StateGraph) -----------------+
-        |                                                                 |
-        v                  v                  v                  v        |
-  vision_adapter     voice_adapter      tool_router        human_review   |
-   (see)              (hear/speak)      (MCP-compatible)    (interrupt)   |
-        \                  |                  |                  /        |
-         \                 v                  v                 /         |
-          +----------> evidence_ledger (claim -> evidence) <---+          |
-                                |                                         |
-                                v                                         |
-                       output_generator                                   |
-                                |                                         |
-                                v                                         |
-                Structured, evidence-backed output (JSON/report)          |
-                                                                          |
-        +-----------------------------------------------------------------+
-```
+![SOPilot System Architecture](docs/images/sopilot_architecture.png)
 
-A new agent is a directory, not a codebase:
+*SOPilot compiles standard operating procedures (checklists, policies, markdown) into stateful runtime executions with first-class voice, vision, and human-in-the-loop validation, all backed by an append-only evidence ledger.*
+
+A new agent is defined purely by configuration and content inside a single directory, rather than custom execution code:
 
 ```text
 examples/<agent_name>/
 ├── sop.md                 # The procedure. The product. The source of truth.
-├── output_schema.json     # The contract for downstream consumers.
-├── agent_config.yaml      # Adapters, tools, runtime policy, HITL behavior.
-└── sample_inputs/         # Deterministic fixtures for local + CI runs.
+├── output_schema.json     # The data contract for downstream consumers.
+├── agent_config.yaml      # Adapters, tools, runtime policy, and HITL behavior.
+└── sample_inputs/         # Deterministic input fixtures for local testing and CI runs.
 ```
 
-That is the whole authoring surface. There is no `agent.py` to write.
+That is the entire authoring surface. There is no custom python agent code to write.
 
 ---
 
@@ -78,7 +52,7 @@ Most agent stacks model the world as `messages: list[str]`. SOPilot models it as
 
 ### Vision Adapter
 
-`core/vision_adapter` is the seam between the planner and "the act of seeing." A plant photo, a damage shot on a rental car, a dashboard warning light — the adapter normalizes them into typed observations that land in state and in the evidence ledger.
+[`core/vision_adapter`](core/vision_adapter) is the seam between the planner and "the act of seeing." A plant photo, a damage shot on a rental car, a dashboard warning light — the adapter normalizes them into typed observations that land in state and in the evidence ledger.
 
 - **Stub provider** for deterministic local runs and CI.
 - **Live provider** (OpenAI vision today, pluggable tomorrow) for production.
@@ -86,7 +60,7 @@ Most agent stacks model the world as `messages: list[str]`. SOPilot models it as
 
 ### Voice Adapter
 
-`core/voice_adapter` is the dual: the seam between the planner and "the act of listening and speaking." The current live reference uses an ElevenLabs conversational agent driving a guided intake flow on a phone browser.
+[`core/voice_adapter`](core/voice_adapter) is the dual: the seam between the planner and "the act of listening and speaking." The current live reference uses an ElevenLabs conversational agent driving a guided intake flow on a phone browser.
 
 The key insight: **voice is not a UI skin over a chatbot.** A spoken SOP run is a stateful dialogue with backpressure — the agent asks one question at a time, waits, confirms, and only advances the procedure when the required evidence is in hand. The voice adapter and the planner cooperate on that rhythm; they are not glued together by a prompt.
 
@@ -109,8 +83,8 @@ These are load-bearing, not aspirational:
 | **Procedure first** | The SOP is the spec. The compiler — not the developer — turns it into steps, decision points, and review gates. |
 | **Typed state, single source of truth** | One Pydantic state object flows through every node. No hidden globals, no scratch dicts, no prompt-stuffed memory. |
 | **Evidence by default** | Conclusions and output fields must trace to ledger entries. Unsupported claims are a runtime error, not a vibe. |
-| **Human-in-the-loop where it matters** | `human_review` uses a single LangGraph interrupt. The planner owns it. Risky or final actions can pause for approve / edit / reject. |
-| **Framework-agnostic seams** | LangGraph imports live in `core/state_runtime` only. Adapters, tool connectors, and report writers depend on SOPilot contracts, not framework internals. Swapping the runtime is mechanical, not a rewrite. |
+| **Human-in-the-loop where it matters** | `human_review` (inside [`core/human_review`](core/human_review)) uses a single LangGraph interrupt. The planner owns it. Risky or final actions can pause for approve / edit / reject. |
+| **Framework-agnostic seams** | LangGraph imports live in [`core/state_runtime`](core/state_runtime) only. Adapters, tool connectors, and report writers depend on SOPilot contracts, not framework internals. Swapping the runtime is mechanical, not a rewrite. |
 | **Fail closed on missing evidence** | When `require_live_adapters` is on, missing provider output halts the run with a clear "what to retry" message rather than papering over the gap. |
 
 If you have ever inherited an agent codebase where prompts, tools, state, UI assumptions, and business logic were tangled in one file — these principles are the antidote.
@@ -149,6 +123,13 @@ python -m sopilot compile examples/car_inspection_agent
 
 You get back the executable plan — steps, evidence requirements, decision points, tool calls, review points, output schema — as JSON. Review it like a query plan. Diff it across SOP edits. Stick it in a code review.
 
+Behind the scenes:
+- **Compile-time** is handled by [`core/sop_compiler`](core/sop_compiler).
+- **Run-time orchestration** is driven by [`core/planner`](core/planner) running on the [`core/state_runtime`](core/state_runtime) graph.
+- **Modality-specific details** are handled by [`core/vision_adapter`](core/vision_adapter) and [`core/voice_adapter`](core/voice_adapter).
+- **External tools** are resolved via [`core/tool_router`](core/tool_router).
+- **Evidence verification** and human validation are tracked in [`core/evidence_ledger`](core/evidence_ledger) and [`core/human_review`](core/human_review).
+
 ---
 
 ## The Reference Agents
@@ -157,11 +138,11 @@ The repo ships with five agents that span the design space deliberately:
 
 | Agent | Modalities | Why it exists |
 |---|---|---|
-| `plant_doctor_agent` | Voice + Vision + HITL | The flagship live demo. Voice-guided triage over plant photos, end-to-end on a phone. |
-| `car_inspection_agent` | Vision + HITL | Multi-photo evidence flow with explicit review gates. |
-| `kids_voice_assessment_agent` | Voice | Stateful conversational SOP with no vision dependency. |
-| `support_runbook_agent` | Text + Tools | Classic runbook automation — proves the framework works headless. |
-| `rental_move_in_agent` | Vision + Forms | Evidence-heavy structured intake with form-style output. |
+| [`plant_doctor_agent`](examples/plant_doctor_agent) | Voice + Vision + HITL | The flagship live demo. Voice-guided triage over plant photos, end-to-end on a phone. |
+| [`car_inspection_agent`](examples/car_inspection_agent) | Vision + HITL | Multi-photo evidence flow with explicit review gates. |
+| [`kids_voice_assessment_agent`](examples/kids_voice_assessment_agent) | Voice | Stateful conversational SOP with no vision dependency. |
+| [`support_runbook_agent`](examples/support_runbook_agent) | Text + Tools | Classic runbook automation — proves the framework works headless. |
+| [`rental_move_in_agent`](examples/rental_move_in_agent) | Vision + Forms | Evidence-heavy structured intake with form-style output. |
 
 Together they answer the question *"is this actually a general framework, or just one app?"* — by being demonstrably different shapes of agent built from the same primitives.
 
